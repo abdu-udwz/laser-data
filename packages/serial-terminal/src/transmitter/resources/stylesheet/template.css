@@ -1,0 +1,216 @@
+.side-panel{
+    -fx-padding: 2 0 0 1;
+}
+
+.side-panel .tab-button{
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-padding: 10;
+    -fx-border-width: 0 0 0 3;
+    -fx-max-width: infinity;
+}
+
+.messenger-flow{
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-width: 0.5;
+}
+
+/*********** message  {type: HBox} ***********/
+/*
+    structure:
+      - message               (HBox)
+        - container           (HBox)
+            - label               (Label)
+*/
+
+.message:sent{
+    -fx-padding: 0 0 0 30;
+}
+.message{
+    -fx-padding: 0 30 0 0;
+}
+
+.message .container{
+    -fx-background-insets: 0, 0.5;
+    -fx-background-radius: 10, 10;
+    -fx-padding: 10;
+}
+
+.message .container .label{
+    -fx-wrap-text: true;
+}
+
+
+.hidden-tab-pane {
+    -fx-tab-max-height: 0 ;
+}
+.hidden-tab-pane .tab-header-area {
+    -fx-padding: 0;
+    visibility: hidden ;
+}
+
+.message-box,
+.messenger-flow,
+.progress-box{
+    -fx-background-radius: 5;
+    -fx-padding: 5;
+}
+
+.message-box{
+    -fx-padding: 5 5 0 5;
+}
+
+
+.terminal-flow{
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+}
+
+.terminal-flow Text{
+    -fx-font-size: 13pt;
+    -fx-font-weight: bold;
+}
+
+
+.terminal-flow .timestamp,
+.terminal-flow .head,
+.terminal-flow .prompt-colon,
+.terminal-flow .prompt1,
+.terminal-flow .prompt2{
+    -fx-font-size: 14pt;
+    -fx-font-weight: bolder;
+}
+/*********** progress box  {type: HBox} ***********/
+/*
+    structure:
+      - progress-box              (HBox)
+        - jfx-progress-bar        (JFXProgressBar)
+        - time-label              (Label)
+        - percent-label           (Label)
+
+*/
+.progress-box .jfx-progress-bar .bar,
+.progress-box .jfx-progress-bar .track{
+    -fx-background-radius: 3;
+}
+
+/*********** settings layout  {type: VBox} ***********/
+/*
+    structure:
+      - settings-layout           (VBox)
+
+        - content                 (VBox)
+            - category-label      (Label)
+            - category-content    (VBox)
+
+        - footer
+
+*/
+.settings-layout .category-bar{
+    -fx-padding: 0;
+}
+
+/*.settings-layout .category-bar .jfx-button{*/
+/*    -fx-max-width: infinity;*/
+/*    -fx-font-size: 15;*/
+/*    -fx-padding: 10 5;*/
+/*}*/
+
+.settings-layout .content .category-content{
+    -fx-background-radius: 10;
+    -fx-padding: 20 10 40 20;
+}
+
+.settings-layout .content .category-label{
+    -fx-font-size: 18;
+}
+
+.settings-layout *.jfx-combo-box{
+    -jfx-label-float: true;
+}
+
+/*********** connection alert {type: CustomAlert} ***********/
+/*
+    structure:
+    - connection-alert-pane                 (DialogPane)
+        -jfx-alert-content-container        (StackPane)
+            - connection-alert-layout       (VBox)
+*/
+
+
+/*********** connection alert layout  {type: AlertLayout} ***********/
+/*
+    structure:
+      - connection-alert-layout           (AlertLayout)
+        - body
+          - refresh-button                (JFXButton)
+*/
+.connection-alert-layout .heading {
+    -fx-padding: 24 24 0 24;
+}
+.connection-alert-layout .body{
+    -fx-padding: 0 8 8 8;
+    /*-fx-pref-width: 200;*/
+}
+.connection-alert-layout .jfx-button {
+    /*-jfx-button-type: RAISED;*/
+    -fx-pref-height: 30;
+    -fx-max-height: 30;
+    -fx-min-width: 10;
+}
+/*********** info alert {type: CustomAlert} ***********/
+/*
+    structure:
+    - info-alert-pane                 (DialogPane)
+        -jfx-alert-content-container  (StackPane)
+            - info-alert-layout       (VBox)
+*/
+/*********** info alert layout  {type: AlertLayout} ***********/
+/*
+    structure:
+      - info-alert-layout           (AlertLayout)
+
+        - footer                    (VBox)
+            - ...
+            - details-pane          (TitledPane)
+                - details-container (VBox)
+                - details-area      (JFXTextArea)
+
+*/
+
+.info-alert-layout .footer .details-pane .title{
+    -fx-padding: 0;
+    -fx-min-height: 0;
+    visibility: false;
+}
+
+.info-alert-layout .footer .details-pane .content{
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: transparent;
+}
+
+/*********** loading alert {type: CustomAlert} ***********/
+/*
+    structure:
+    - loading-alert-pane                 (DialogPane)
+        -jfx-alert-content-container     (StackPane)
+            - loading-alert-layout        (VBox)
+*/
+
+
+/*********** loading alert layout  {type: AlertLayout} ***********/
+/*
+    structure:
+      - loading-alert-layout           (AlertLayout)
+*/
+
+.loading-alert-layout:bar .body{
+    /* remove the bottom padding in bar style it looks ugly*/
+    -fx-padding: 0 24 0 24;
+}
+
+.loading-alert-layout:bar .body .percentage{
+    -fx-font-size: 10pt;
+}

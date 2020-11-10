@@ -1,0 +1,346 @@
+*{
+    /* a dark green color used in text field-like control as border color
+       and for some buttons background color....
+       it's the main ui color besides the background color
+     */
+    -rq-accent-dark: rgb(55, 204, 195);
+    -rq-accent-light: rgb(62, 231, 219);
+
+    -rq-background: rgb(44, 164, 156);
+    -rq-background-alt: white;
+    -rq-background-alt2: derive(-fx-background, -4%);
+
+    -rq-text-background: white;
+    -rq-text-background-alt: black;
+    -rq-text-background-alt2: black;
+
+    -rq-text-accent-dark: white;
+    -rq-text-accent-light: white;
+
+    -rq-shadow1: rgba(20, 20, 20, 0.1);
+    -rq-shadow2: rgba(20, 20, 20, 0.2);
+    -rq-shadow3: rgba(20, 20, 20, 0.3);
+    -rq-shadow4: rgba(20, 20, 20, 0.4);
+    -rq-shadow5: rgba(20, 20, 20, 0.5);
+}
+
+#auth-root-pane {
+    -fx-background-color: -rq-background;
+}
+
+#auth-form {
+    -fx-background-color: -rq-background-alt;
+}
+
+.jfx-combo-box,
+.jfx-text-area,
+.jfx-date-picker,
+.jfx-text-field,
+.jfx-password-field {
+    -jfx-unfocus-color: -rq-accent-light;
+    -jfx-focus-color: -rq-accent-dark;
+}
+
+.jfx-time-picker,
+.jfx-date-picker{
+    -jfx-default-color: -rq-accent-light;
+}
+
+.jfx-button {
+    -fx-background-color: -rq-accent-light;
+    -fx-text-fill: -rq-background-alt;
+}
+
+.jfx-button .jfx-rippler {
+    -jfx-rippler-fill: -rq-accent-dark;
+}
+
+.jfx-date-picker .jfx-button{
+    -fx-background-color: transparent;
+}
+
+
+.text-input:focused {
+    -fx-highlight-fill: -rq-accent-light;
+}
+
+.jfx-list-cell{
+    -fx-background-color: transparent;
+    -fx-text-fill: -rq-text-background-alt2;
+}
+
+.jfx-list-cell .jfx-rippler{
+    -jfx-rippler-fill: -rq-accent-dark;
+}
+
+.jfx-list-cell:hover{
+    -fx-background-color: derive(-rq-accent-light, 75%);
+}
+
+.jfx-list-cell:selected{
+    -fx-background-color: -rq-accent-light;
+    -fx-text-fill: -rq-text-background;
+}
+
+.jfx-combo-box > .jfx-list-cell{
+    -fx-background-color: transparent;
+    -fx-text-fill: -rq-text-background-alt2;
+}
+
+.jfx-combo-box > .jfx-list-cell .jfx-rippler{
+    -jfx-rippler-disabled: true;
+}
+
+.jfx-combo-box .list-view .jfx-list-cell:selected{
+    -fx-background-color: -rq-accent-light;
+}
+
+
+.jfx-check-box{
+    -jfx-checked-color: -rq-accent-light;
+}
+
+.jfx-check-box .jfx-rippler{
+    -jfx-rippler-fill: -rq-accent-dark;
+}
+
+.jfx-tab-pane .headers-region {
+    -fx-background-color: -rq-background;
+}
+.jfx-tab-pane .tab-header-background {
+    -fx-background-color: -rq-background;
+}
+
+.jfx-progress-bar .bar{
+    -fx-background-color: -rq-accent-dark;
+}
+
+
+/* Styling the slider thumb */
+.jfx-slider > .thumb {
+    -fx-background-color: -rq-accent-dark;
+}
+
+/* Styling the filled track */
+.jfx-slider > .colored-track {
+    -fx-background-color: -rq-accent-dark;
+}
+
+/* Styling the animated thumb */
+.jfx-slider > .animated-thumb {
+    -fx-background-color: -rq-accent-dark;
+}
+
+/* Styling the slider value text inside animated thumb */
+.jfx-slider .slider-value {
+    -fx-fill: -rq-text-background;
+    -fx-stroke: -rq-text-background;
+}
+
+
+
+
+.jfx-button .glyph-icon{
+    -fx-fill: -rq-text-background;
+}
+
+
+.side-panel{
+    -fx-background-color: -rq-background;
+}
+
+.side-panel .list-view{
+    -fx-background-color: transparent;
+}
+
+.side-panel .label,
+.side-panel .jfx-list-cell,
+.side-panel .tab-button,
+.side-panel .jfx-toggle-button{
+    -fx-background-color: transparent;
+    -fx-text-fill: -rq-text-background;
+}
+.side-panel .glyph-icon{
+    -fx-fill: -rq-text-background;
+}
+
+.messenger-flow{
+    -fx-background-color: derive(-rq-background-alt2, -2%);
+    -fx-border-color: -rq-background;
+}
+.messenger-flow,
+.message-box,
+.progress-box{
+    -fx-background-color: -rq-background-alt;
+}
+
+/*********** message  {type: HBox} ***********/
+/*
+    structure:
+      - message               (HBox)
+        - container           (HBox)
+            - label               (Label)
+*/
+.message .container{
+    -fx-background-color: -rq-background, -rq-background-alt;
+}
+.message .container .label{
+    -fx-text-fill: -rq-background;
+}
+
+.message:sent .container{
+    -fx-background-color: -rq-background-alt, -rq-background;
+}
+.message:sent .container .label{
+    -fx-text-fill: -rq-background-alt;
+}
+
+/*********** progress box  {type: HBox} ***********/
+/*
+    structure:
+      - progress-box              (HBox)
+        - jfx-progress-bar        (JFXProgressBar)
+        - time-label              (Label)
+        - percent-label           (Label)
+
+*/
+
+
+/*********** terminal flow  {type: TextFlow} ***********/
+/*
+    structure:
+      - terminal-flow         (TextFlow)
+        [
+            - timestamp       (Text)
+            - head            (Text)
+            - prompt-colon    (Text)
+            - prompt1         (Text)
+            - prompt2         (Text)
+            - prompt2         (Text)
+
+            - normal          (Text)
+            - success         (Text)
+            - warning         (Text)
+            - error           (Text)
+        ]
+
+*/
+.terminal-flow{
+    -fx-background-color: derive(-rq-background, -8%);
+}
+
+.terminal-flow Text,
+.terminal-flow .normal{
+    -fx-fill: -rq-text-background;
+}
+
+.terminal-flow .timestamp{
+    -fx-fill: -rq-text-background;
+}
+
+.terminal-flow .head{
+    -fx-fill: rgb(60, 85, 110);
+}
+
+.terminal-flow .prompt-colon{
+    -fx-fill: -rq-text-background;
+}
+
+.terminal-flow .prompt1{
+    -fx-fill: rgb(192, 57, 43);
+}
+
+.terminal-flow .prompt2{
+    -fx-fill: -rq-text-background;
+}
+
+.terminal-flow .success{
+    -fx-fill: rgb(3, 255, 101);
+}
+
+
+.terminal-flow .warning{
+    -fx-fill: rgb(255, 173, 36);
+}
+
+
+.terminal-flow .error{
+    -fx-fill: rgb(239, 44, 57);
+}
+/*********** settings layout  {type: VBox} ***********/
+/*
+    structure:
+      - settings-layout           (VBox)
+
+*/
+.settings-layout{
+    -fx-background-color: -rq-background-alt;
+}
+
+.settings-layout .content .category-content{
+    -fx-background-color: derive(-rq-background-alt2, -6%);
+}
+
+
+/*********** connection alert {type: CustomAlert} ***********/
+/*
+    structure:
+    - connection-alert-pane                 (DialogPane)
+        -jfx-alert-content-container        (StackPane)
+            - connection-alert-layout       (VBox)
+*/
+
+
+/*********** connection alert layout  {type: AlertLayout} ***********/
+/*
+    structure:
+      - connection-alert-layout           (AlertLayout)
+        - body
+          - refresh-button                (JFXButton)
+*/
+.connection-alert-layout .refresh-button{
+    -fx-background-color: transparent;
+}
+
+.connection-alert-layout .refresh-button .glyph-icon{
+    -fx-fill: black
+}
+.glyph-icon:disabled{
+    -fx-opacity: 0.4;
+}
+
+/*********** transparent scroll {type: ScrollPane} (used with -fx-background-alt) ***********/
+/*
+    structure:
+    - transparent-scroll   (ScrollPane)
+        - view-port         (Line)
+ */
+.transparent-scroll,
+.transparent-scroll .viewport {
+    -fx-background-color: -rq-background-alt;
+}
+
+
+/*****************  scroll-pane **************/
+.scroll-bar .thumb {
+    -fx-background-color: derive(-rq-background-alt2, -20%);
+}
+
+.scroll-pane .corner,
+.scroll-bar,
+.scroll-bar .increment-button .increment-arrow,
+.scroll-bar .decrement-button .decrement-arrow{
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+    -fx-pref-height: 0;
+    -fx-pref-width: 12;
+}
+
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button {
+    -fx-pref-height: 10;
+    -fx-pref-width: 0;
+}
