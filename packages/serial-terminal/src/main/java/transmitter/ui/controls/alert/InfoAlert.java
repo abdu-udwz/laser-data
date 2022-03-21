@@ -79,7 +79,7 @@ public class InfoAlert extends CustomAlert {
         this(null, infoAlertType, actions);
     }
 
-    public InfoAlert(@Nullable Stage stage, InfoAlertType infoAlertType, AlertAction... actions) {
+    public InfoAlert(Stage stage, InfoAlertType infoAlertType, AlertAction... actions) {
         super(stage);
 
         setLayout(myCustomLayout);

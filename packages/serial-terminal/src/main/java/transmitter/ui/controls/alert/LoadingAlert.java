@@ -3,7 +3,6 @@ package transmitter.ui.controls.alert;
 import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXSpinner;
-import com.sun.istack.internal.Nullable;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
@@ -35,15 +34,15 @@ public class LoadingAlert {
     private final ObjectProperty<LoadingStyle> loadingStyle = new SimpleObjectProperty<>();
     private final DoubleProperty progress = new SimpleDoubleProperty(-1);
 
-    public LoadingAlert(@Nullable Stage stage) {
+    public LoadingAlert(Stage stage) {
         this(stage, LoadingStyle.SPINNER);
     }
 
-    public LoadingAlert(@Nullable Stage stage, AlertAction... actions) {
+    public LoadingAlert(Stage stage, AlertAction... actions) {
         this(stage, LoadingStyle.SPINNER, actions);
     }
 
-    public LoadingAlert(@Nullable Stage stage, LoadingStyle loadingStyle, AlertAction... actions) {
+    public LoadingAlert(Stage stage, LoadingStyle loadingStyle, AlertAction... actions) {
         this.mainAlert = new CustomAlert<>(stage);
         setLoadingStyle(loadingStyle);
 

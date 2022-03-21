@@ -2,7 +2,6 @@ package transmitter.ui.controls.alert;
 
 import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXButton;
-import com.sun.istack.internal.Nullable;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -32,7 +31,7 @@ public class CustomAlert<T extends AlertLayout> extends JFXAlert<AlertAction> {
         this(null, actions);
     }
 
-    public CustomAlert(@Nullable Stage stage, AlertAction... actions) {
+    public CustomAlert(Stage stage, AlertAction... actions) {
         super(stage);
 
         setLayout((T) new AlertLayout());

@@ -1,6 +1,5 @@
 package transmitter.ui.stage;
 
-import com.sun.istack.internal.Nullable;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -36,7 +35,6 @@ public class LoadableStage<T> extends Stage {
         });
     }
 
-    @Nullable
     public T getController() {
         return controller;
     }
