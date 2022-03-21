@@ -1,7 +1,6 @@
 package transmitter.ui.controls.alert;
 
 import com.jfoenix.controls.JFXButton;
-import com.sun.istack.internal.Nullable;
 import javafx.beans.property.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextArea;
