@@ -6,7 +6,6 @@ import transmitter.ui.controls.alert.AlertAction;
 import transmitter.ui.controls.alert.InfoAlert;
 import transmitter.ui.controls.alert.InfoAlertType;
 
-import java.awt.*;
 import java.util.Optional;
 
 public abstract class Alerts {
@@ -23,7 +22,6 @@ public abstract class Alerts {
     public static Optional<AlertAction> warningAlert(Stage stage, String heading, String body,
             AlertAction... actions) {
         InfoAlert alert = prepAlert(stage, InfoAlertType.WARNING, heading, body, actions);
-        Toolkit.getDefaultToolkit().beep();
         return alert.showAndWait();
     }
 
@@ -35,7 +33,6 @@ public abstract class Alerts {
             alert.setUseDetails(true);
             alert.visualizeStackTrace(throwable);
         }
-        Toolkit.getDefaultToolkit().beep();
         return alert.showAndWait();
     }
 

@@ -1,25 +1,26 @@
 package transmitter.ui.controls.alert;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import org.kordamp.ikonli.Ikon;
+import org.kordamp.ikonli.materialdesign2.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 public enum InfoAlertType {
 
-    NONE(Color.TRANSPARENT, FontAwesomeIcon.CIRCLE, 32),
-    INFO(Color.DEEPSKYBLUE, FontAwesomeIcon.INFO_CIRCLE, 32),
-    CONFIRM(Color.DEEPSKYBLUE, FontAwesomeIcon.QUESTION_CIRCLE, 32),
-    WARNING(Color.DARKORANGE, FontAwesomeIcon.EXCLAMATION_TRIANGLE, 32),
-    ERROR(Color.RED, FontAwesomeIcon.EXCLAMATION_CIRCLE, 32);
+    NONE(MaterialDesignB.BOX, Color.TRANSPARENT, 32),
+    INFO(MaterialDesignI.INFORMATION, Color.DEEPSKYBLUE, 32),
+    CONFIRM(MaterialDesignH.HELP_CIRCLE, Color.DEEPSKYBLUE, 32),
+    WARNING(MaterialDesignA.ALERT, Color.DARKORANGE, 32),
+    ERROR(MaterialDesignA.ALERT, Color.RED, 32);
 
     public final Paint fill;
-    public final FontAwesomeIcon graphic;
-    public final Number glyphSize;
+    public final Ikon code;
+    public final int glyphSize;
 
-    InfoAlertType(Paint fill, FontAwesomeIcon graphic, Number glyphSize) {
+    InfoAlertType(Ikon code, Paint fill, int size) {
         this.fill = fill;
-        this.graphic = graphic;
-        this.glyphSize = glyphSize;
+        this.code = code;
+        this.glyphSize = size;
     }
 
 }

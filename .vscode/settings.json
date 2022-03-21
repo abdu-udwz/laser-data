@@ -1,0 +1,5 @@
+{
+  "maven.terminal.useJavaHome": true,
+  "maven.view": "hierarchical",
+  "java.configuration.updateBuildConfiguration": "automatic"
+}

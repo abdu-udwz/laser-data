@@ -1,6 +1,6 @@
 package transmitter.ui.controls.alert;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import org.kordamp.ikonli.javafx.FontIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -20,7 +20,7 @@ public class AlertLayout extends VBox {
     @FXML
     protected Label headingLabel;
     @FXML
-    protected FontAwesomeIconView graphicView;
+    protected FontIcon graphicView;
 
     @FXML
     protected StackPane bodyPane;

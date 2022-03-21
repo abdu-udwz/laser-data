@@ -6,8 +6,6 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.validation.RequiredFieldValidator;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.concurrent.Task;
@@ -112,7 +110,7 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
         setLayout(new ConnectionAlertLayout());
 
         setHeadingText("Connect To Board");
-        setGraphicSize(0);
+        setGraphicSize(1);
         initStyle(StageStyle.TRANSPARENT);
 
         initComponents();

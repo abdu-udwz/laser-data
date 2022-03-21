@@ -36,7 +36,6 @@ import transmitter.ui.controller.main.tab.MainTab;
 import transmitter.util.Threading;
 import transmitter.util.Windows;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.concurrent.*;
 
@@ -273,7 +272,6 @@ public class MainController {
                                 "Some data might have been lost while receiving. The receiving process will continue but no grants for what the data will look like!\n\nLost packet index: "
                                         + lostIndex);
                         warningAlert.show();
-                        Toolkit.getDefaultToolkit().beep();
                     }
                 }
             });

@@ -3,8 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXProgressBar?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -21,30 +20,30 @@
          </VBox.margin>
       </JFXProgressBar>
       <GridPane fx:id="inputPane" hgap="5.0" vgap="33.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" />
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" />
             <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" />
-          <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
          <children>
             <JFXComboBox fx:id="serialCombo" labelFloat="true" maxWidth="-Infinity" prefWidth="180.0" promptText="Connection port" GridPane.columnIndex="2" />
             <JFXButton fx:id="portReloadButton" contentDisplay="GRAPHIC_ONLY" styleClass="refresh-button" text="Button" GridPane.columnIndex="3">
                <graphic>
-                  <FontAwesomeIconView glyphName="REPEAT" size="16" />
+                  <FontIcon iconLiteral="mdi2r-repeat" iconSize="16" />
                </graphic>
             </JFXButton>
             <JFXComboBox fx:id="baudCombo" labelFloat="true" maxWidth="1.7976931348623157E308" promptText="Baud Rate" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-             <JFXComboBox fx:id="socketIdentityCombo" labelFloat="true" maxWidth="1.7976931348623157E308" promptText="Socket Identity" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <JFXComboBox fx:id="socketIdentityCombo" labelFloat="true" maxWidth="1.7976931348623157E308" promptText="Socket Identity" GridPane.columnIndex="2" GridPane.rowIndex="2" />
 
-             <MaterialDesignIconView glyphName="USB" size="20" GridPane.columnIndex="1" />
-            <MaterialDesignIconView glyphName="SPEEDOMETER" layoutX="21.0" layoutY="33.0" size="20" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <MaterialDesignIconView glyphName="ACCOUNT" layoutX="21.0" layoutY="33.0" size="20" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <FontIcon iconLiteral="mdi2u-usb" iconSize="20" GridPane.columnIndex="1" />
+            <FontIcon iconLiteral="mdi2s-speedometer" layoutX="21.0" layoutY="33.0" iconSize="20" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <FontIcon iconLiteral="mdi2a-account" layoutX="21.0" layoutY="33.0" iconSize="20" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
          <VBox.margin>
             <Insets right="5.0" />
@@ -55,18 +54,19 @@
             <JFXButton fx:id="connectButton" defaultButton="true" text="Connect">
                <font>
                   <Font name="System Bold" size="13.0" />
-               </font></JFXButton>
+               </font>
+            </JFXButton>
             <JFXButton fx:id="settingsButton" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" text="Settings">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
                <graphic>
-                  <MaterialDesignIconView fill="WHITE" glyphName="SETTINGS" size="18" />
+                  <FontIcon fill="WHITE" iconLiteral="mdi2c-cog" iconSize="18" />
                </graphic>
             </JFXButton>
             <JFXButton fx:id="closeButton" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="198.0" layoutY="10.0" text="Close">
                <graphic>
-                  <MaterialDesignIconView fill="WHITE" glyphName="WINDOW_CLOSE" size="18" />
+                  <FontIcon fill="WHITE" iconLiteral="mdi2c-close" iconSize="18" />
                </graphic>
             </JFXButton>
          </children>

@@ -1,6 +1,5 @@
 package transmitter.socket;
 
-import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -8,12 +7,9 @@ import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import transmitter.util.logging.Logging;
 
 import java.net.URISyntaxException;
-import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 public abstract class SocketManager {

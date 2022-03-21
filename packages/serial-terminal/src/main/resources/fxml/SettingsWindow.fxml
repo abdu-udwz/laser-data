@@ -3,7 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXSlider?>
-<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
@@ -27,14 +27,10 @@
         <VBox fx:id="sidePanel" minWidth="160.0" HBox.hgrow="ALWAYS">
             <children>
                 <JFXButton fx:id="serialCategoryButton" styleClass="tab-button" alignment="BASELINE_LEFT" text="Serial &amp; Board">
-                    <graphic>
-                        <MaterialDesignIconView glyphName="USB" size="20" />
-                    </graphic>
+                    <FontIcon iconLiteral="mdi2u-usb" iconSize="20" />
                 </JFXButton>
                 <JFXButton fx:id="commCategoryButton" styleClass="tab-button" alignment="BASELINE_LEFT" text="Communication">
-                    <graphic>
-                        <MaterialDesignIconView glyphName="ACCESS_POINT_NETWORK" size="20" />
-                    </graphic>
+                    <FontIcon iconLiteral="mdi2a-access-point-network" iconSize="20" />
                 </JFXButton>
             </children>
             <styleClass>

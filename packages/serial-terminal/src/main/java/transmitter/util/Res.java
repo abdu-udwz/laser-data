@@ -1,14 +1,12 @@
 package transmitter.util;
 
-import com.sun.istack.internal.NotNull;
-
 import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Res {
 
-    private final static String RESOURCES = "/transmitter/resources/";
+    private final static String RESOURCES = "/";
     private final static String STYLE_SHEET = RESOURCES + "stylesheet/";
     private final static String PROPERTIES = RESOURCES + "properties/";
     private final static String FXML = RESOURCES + "fxml/";
@@ -19,23 +17,8 @@ public class Res {
     private final static String DEVELOPER = FXML + "developer/";
     private final static String DIALOGS = FXML + "dialogs/";
 
-    final static String LANGUAGE_PATH = "transmitter.resources.string.strings";
-    final static String DEFAULT_PROPERTIES = "transmitter.resources.properties.default";
-
-    public enum Image {
-        CRESTYANO(IMAGE + "players_photos/Crestyano.jpg");
-
-        final String url;
-
-        Image(String url) {
-            this.url = url;
-        }
-
-        @NotNull
-        public javafx.scene.image.Image getImage() {
-            return new javafx.scene.image.Image(getClass().getResourceAsStream(url));
-        }
-    }
+    final static String LANGUAGE_PATH = "string.strings";
+    final static String DEFAULT_PROPERTIES = "properties.default";
 
     public enum Fxml {
         MAIN_WINDOW(FXML + "MainWindow.fxml"),
@@ -55,7 +38,6 @@ public class Res {
             this.url = url;
         }
 
-        @NotNull
         public URL getUrl() {
 
             return getClass().getResource(url);
@@ -78,7 +60,6 @@ public class Res {
             this.url = url;
         }
 
-        @NotNull
         public String getUrl() {
             return getClass().getResource(url).toExternalForm();
         }

@@ -95,9 +95,9 @@ public class InfoAlert extends CustomAlert {
     private void initListeners() {
 
         alertTypeProperty().addListener((observable, oldValue, newValue) -> {
-            myCustomLayout.graphicView.setIcon(newValue.graphic);
-            myCustomLayout.graphicView.setFill(newValue.fill);
-            myCustomLayout.graphicView.setGlyphSize(newValue.glyphSize);
+            myCustomLayout.graphicView.setIconColor(newValue.fill);
+            myCustomLayout.graphicView.setIconCode(newValue.code);
+            myCustomLayout.graphicView.setIconSize(newValue.glyphSize);
         });
 
         useDetailsProperty().addListener((observable, oldValue, newValue) -> onUseDetailsChanged());

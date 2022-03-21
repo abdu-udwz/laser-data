@@ -2,7 +2,9 @@ package transmitter.ui.controls.alert;
 
 import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXButton;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+
+import org.kordamp.ikonli.Ikon;
+import org.kordamp.ikonli.javafx.FontIcon;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
@@ -128,8 +130,8 @@ public class CustomAlert<T extends AlertLayout> extends JFXAlert<AlertAction> {
         return layout().bodyLabel.textProperty();
     }
 
-    public void setGraphic(FontAwesomeIcon graphic) {
-        layout().graphicView.setIcon(graphic);
+    public void setGraphic(Ikon graphic) {
+        layout().graphicView.setIconCode(graphic);
     }
 
     public void setGraphicFill(Paint fill) {
@@ -152,12 +154,12 @@ public class CustomAlert<T extends AlertLayout> extends JFXAlert<AlertAction> {
     // return layout()graphicView.icon();
     // }
 
-    public void setGraphicSize(double size) {
-        layout().graphicView.setGlyphSize(size);
+    public void setGraphicSize(int size) {
+        layout().graphicView.setIconSize(size);
     }
 
-    public Number getGraphicSize() {
-        return layout().graphicView.getGlyphSize();
+    public int getGraphicSize() {
+        return layout().graphicView.getIconSize();
     }
 
 }
