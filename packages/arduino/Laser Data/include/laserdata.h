@@ -3,7 +3,6 @@
 
 #include "Arduino.h"
 #include "prefs.h"
-#include "ResponsiveAnalogRead.h"
 
 void receiverMessage(String);
 void receiverLoop();
