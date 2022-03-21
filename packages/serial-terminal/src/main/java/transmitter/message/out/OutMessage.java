@@ -20,6 +20,6 @@ public class OutMessage extends SerialMessage {
   }
 
   public String message(Object paramter) {
-    return this.getRawMessage() + "*" + paramter + "&";
+    return this.getRawMessage() + "*" + paramter + "&\n";
   }
 }
