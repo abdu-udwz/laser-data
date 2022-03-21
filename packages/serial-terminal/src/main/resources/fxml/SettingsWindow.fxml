@@ -27,10 +27,14 @@
         <VBox fx:id="sidePanel" minWidth="160.0" HBox.hgrow="ALWAYS">
             <children>
                 <JFXButton fx:id="serialCategoryButton" styleClass="tab-button" alignment="BASELINE_LEFT" text="Serial &amp; Board">
-                    <FontIcon iconLiteral="mdi2u-usb" iconSize="20" />
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2u-usb" iconSize="20" iconColor="WHITE" />
+                    </graphic>
                 </JFXButton>
                 <JFXButton fx:id="commCategoryButton" styleClass="tab-button" alignment="BASELINE_LEFT" text="Communication">
-                    <FontIcon iconLiteral="mdi2a-access-point-network" iconSize="20" />
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2a-access-point-network" iconSize="20" iconColor="WHITE" />
+                    </graphic>
                 </JFXButton>
             </children>
             <styleClass>

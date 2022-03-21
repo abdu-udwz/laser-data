@@ -3,7 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXProgressBar?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ContextMenu?>
@@ -55,7 +55,7 @@
             <JFXTextField fx:id="messageField" HBox.hgrow="ALWAYS" />
             <JFXButton fx:id="messageSendButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="30.0" text="Send">
                <graphic>
-                  <MaterialDesignIconView glyphName="SEND" size="16" />
+                  <FontIcon iconLiteral="mdi2s-send" iconSize="16" iconColor="WHITE" />
                </graphic>
             </JFXButton>
          </children>

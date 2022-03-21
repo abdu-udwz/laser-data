@@ -3,7 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXToggleButton?>
-<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -49,7 +49,7 @@
                               <JFXButton fx:id="disconnectButton" maxWidth="1.7976931348623157E308" text="Disconnect" HBox.hgrow="ALWAYS" />
                               <JFXButton fx:id="settingsButton" alignment="BASELINE_LEFT" contentDisplay="GRAPHIC_ONLY" text="Settings">
                                  <graphic>
-                                    <MaterialDesignIconView glyphName="SETTINGS" size="16.0" />
+                                    <FontIcon iconLiteral="mdi2c-cog" iconSize="16" iconColor="WHITE" />
                                  </graphic>
                               </JFXButton>
                            </children>
