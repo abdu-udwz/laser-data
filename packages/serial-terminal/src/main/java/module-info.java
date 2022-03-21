@@ -6,7 +6,7 @@ module transmitter {
   requires org.kordamp.ikonli.javafx;
   requires org.kordamp.ikonli.materialdesign2;
 
-  requires com.fazecast.jSerialComm;
+  requires transitive com.fazecast.jSerialComm;
   requires com.jfoenix;
 
   requires json;
