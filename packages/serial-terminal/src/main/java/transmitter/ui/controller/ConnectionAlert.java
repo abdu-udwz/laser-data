@@ -109,7 +109,7 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
         super((AlertAction) null);
         setLayout(new ConnectionAlertLayout());
 
-        setHeadingText("Connect To Board");
+        setHeadingText("Connect to Board");
         setGraphicSize(1);
         initStyle(StageStyle.TRANSPARENT);
 
@@ -208,7 +208,6 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
         connectionTask = new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
-
                 logTerminal(Level.INFO, "Establishing connection..");
                 boolean connected = BAO.connect(serialPort, baudRate);
 
@@ -233,6 +232,7 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
                     SocketManager.connect(socketIdentity, socketHost);
                     return true;
                 } else {
+                    logTerminal(Level.INFO, String.valueOf(serialPort.getLastErrorCode()));
                     throw new ConnectException("Could not open port [" + serialPort.getSystemPortName() + "]");
                 }
             }

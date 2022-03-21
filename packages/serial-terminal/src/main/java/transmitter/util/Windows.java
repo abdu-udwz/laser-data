@@ -16,5 +16,8 @@ public class Windows {
     static {
         SETTINGS_WINDOW.initModality(Modality.APPLICATION_MODAL);
         SETTINGS_WINDOW.setResizable(false);
+        SETTINGS_WINDOW.setTitle("Settings");
+
+        MAIN_WINDOW.setTitle("Laser Data");
     }
 }
