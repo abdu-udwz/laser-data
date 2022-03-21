@@ -1,4 +1,4 @@
-package transmitter.source.ui.developer;
+package transmitter.ui.developer;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
@@ -14,7 +14,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
-import transmitter.source.message.in.LightReadingMessage;
+import transmitter.message.in.LightReadingMessage;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,11 +26,16 @@ import java.util.TimerTask;
 
 public class LightTimeChart {
 
-    @FXML private ScrollPane chartScroll;
-    @FXML private StackPane chartStack;
-    @FXML private Spinner<Integer> durationSpinner;
-    @FXML private JFXButton prevButton;
-    @FXML private JFXButton nextButton;
+    @FXML
+    private ScrollPane chartScroll;
+    @FXML
+    private StackPane chartStack;
+    @FXML
+    private Spinner<Integer> durationSpinner;
+    @FXML
+    private JFXButton prevButton;
+    @FXML
+    private JFXButton nextButton;
 
     private LineChart<Number, Number> lineChart;
     private NumberAxis lightAxis;
@@ -42,11 +47,10 @@ public class LightTimeChart {
     private final ObservableList<LightReadingMessage> lightReadings = FXCollections.observableArrayList();
 
     @FXML
-    private void initialize(){
+    private void initialize() {
 
         try {
-            List<String> receiverStrings =
-                    Files.readAllLines(Paths.get("/home/abdu/Desktop/test5.rece"));
+            List<String> receiverStrings = Files.readAllLines(Paths.get("/home/abdu/Desktop/test5.rece"));
 
             for (String receiverString : receiverStrings) {
                 lightReadings.add(new LightReadingMessage(receiverString.substring(12)));
@@ -60,10 +64,10 @@ public class LightTimeChart {
 
         removeRedundantPairs();
 
-//        int size = lightReadings.size();
-//        ReceiverPair middlePair = lightReadings.get(5075);
-//        setCurrentEndTimestamp(middlePair.getTimestamp());
-//        setCurrentReceiverPairIndex(5075);
+        // int size = lightReadings.size();
+        // ReceiverPair middlePair = lightReadings.get(5075);
+        // setCurrentEndTimestamp(middlePair.getTimestamp());
+        // setCurrentReceiverPairIndex(5075);
 
         lightAxis = new NumberAxis();
         timeAxis = new NumberAxis();
@@ -86,7 +90,7 @@ public class LightTimeChart {
         });
     }
 
-    private void testLiveShow(){
+    private void testLiveShow() {
         timeAxis.setAnimated(false);
         lightAxis.setAnimated(false);
         lineChart.setAnimated(false);
@@ -94,8 +98,7 @@ public class LightTimeChart {
         XYChart.Series<Number, Number> showSeries = new XYChart.Series<>();
         lineChart.getData().add(showSeries);
 
-
-        final int[] currentPairIndex = {0};
+        final int[] currentPairIndex = { 0 };
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -103,20 +106,21 @@ public class LightTimeChart {
                 LightReadingMessage reading = lightReadings.get(currentPairIndex[0]);
 
                 Platform.runLater(() -> {
-                    if (showSeries.getData().size() >= 40){
+                    if (showSeries.getData().size() >= 40) {
                         showSeries.getData().remove(0);
                     }
 
-                    XYChart.Data<Number, Number> newData = new XYChart.Data<>(reading.getTimestamp(), reading.getLight());
+                    XYChart.Data<Number, Number> newData = new XYChart.Data<>(reading.getTimestamp(),
+                            reading.getLight());
                     showSeries.getData().add(newData);
                 });
 
                 currentPairIndex[0]++;
-                }
-            }, 1000, 200);
+            }
+        }, 1000, 200);
     }
 
-    private void initListeners(){
+    private void initListeners() {
         nextButton.setOnAction(event -> {
             setChartSample(nextSample());
         });
@@ -126,7 +130,7 @@ public class LightTimeChart {
         });
     }
 
-    public void setChartSample(List<LightReadingMessage> lightReadings){
+    public void setChartSample(List<LightReadingMessage> lightReadings) {
 
         lineChart.getData().clear();
 
@@ -134,8 +138,7 @@ public class LightTimeChart {
 
         for (LightReadingMessage reading : lightReadings) {
 
-            XYChart.Data<Number, Number> data =
-                    new XYChart.Data<>(reading.getTimestamp(), reading.getLight());
+            XYChart.Data<Number, Number> data = new XYChart.Data<>(reading.getTimestamp(), reading.getLight());
 
             series.getData().add(data);
         }
@@ -148,8 +151,8 @@ public class LightTimeChart {
 
         long estimatedEndTimestamp = getCurrentEndTimestamp() + getByteDuration();
 
-        List<LightReadingMessage> searchIn =
-                this.lightReadings.subList(getCurrentReceiverPairIndex(), this.lightReadings.size());
+        List<LightReadingMessage> searchIn = this.lightReadings.subList(getCurrentReceiverPairIndex(),
+                this.lightReadings.size());
 
         int startIndex = getCurrentReceiverPairIndex();
         int endIndex = 0;
@@ -158,8 +161,8 @@ public class LightTimeChart {
         for (LightReadingMessage reading : searchIn) {
             long pairTimestamp = reading.getTimestamp();
 
-            if ( pairTimestamp >= estimatedEndTimestamp -1 &&
-                    pairTimestamp <= estimatedEndTimestamp + 1){
+            if (pairTimestamp >= estimatedEndTimestamp - 1 &&
+                    pairTimestamp <= estimatedEndTimestamp + 1) {
 
                 endIndex = lightReadings.indexOf(reading);
                 endTimestamp = pairTimestamp;
@@ -170,8 +173,7 @@ public class LightTimeChart {
 
         if (endIndex == 0) {
             return FXCollections.observableArrayList();
-        }
-        else {
+        } else {
             setCurrentEndTimestamp(endTimestamp);
             setCurrentReceiverPairIndex(endIndex);
             List<LightReadingMessage> sample = this.lightReadings.subList(startIndex, endIndex);
@@ -179,12 +181,11 @@ public class LightTimeChart {
         }
     }
 
-    private ObservableList<LightReadingMessage> previousSample(){
+    private ObservableList<LightReadingMessage> previousSample() {
 
         long estimatedStartTimestamp = getCurrentEndTimestamp() - (2 * getByteDuration());
 
-        List<LightReadingMessage> searchIn =
-                this.lightReadings.subList(0, getCurrentReceiverPairIndex());
+        List<LightReadingMessage> searchIn = this.lightReadings.subList(0, getCurrentReceiverPairIndex());
 
         int startIndex = 0;
         long startTimestamp = 0;
@@ -192,8 +193,8 @@ public class LightTimeChart {
         for (LightReadingMessage reading : searchIn) {
             long pairTimestamp = reading.getTimestamp();
 
-            if ( pairTimestamp >= estimatedStartTimestamp -1 &&
-                    pairTimestamp <= estimatedStartTimestamp + 1){
+            if (pairTimestamp >= estimatedStartTimestamp - 1 &&
+                    pairTimestamp <= estimatedStartTimestamp + 1) {
 
                 startIndex = lightReadings.indexOf(reading);
                 startTimestamp = pairTimestamp;
@@ -210,8 +211,8 @@ public class LightTimeChart {
         for (LightReadingMessage reading : searchIn) {
             long pairTimestamp = reading.getTimestamp();
 
-            if ( pairTimestamp >= estimatedEndTimestamp -1 &&
-                    pairTimestamp <= estimatedEndTimestamp + 1){
+            if (pairTimestamp >= estimatedEndTimestamp - 1 &&
+                    pairTimestamp <= estimatedEndTimestamp + 1) {
 
                 endIndex = lightReadings.indexOf(reading);
                 endTimestamp = pairTimestamp;
@@ -220,10 +221,9 @@ public class LightTimeChart {
             }
         }
 
-        if (startTimestamp == 0 || endIndex == 0 || endTimestamp == 0){
+        if (startTimestamp == 0 || endIndex == 0 || endTimestamp == 0) {
             return FXCollections.observableArrayList();
-        }
-        else{
+        } else {
 
             setCurrentEndTimestamp(endTimestamp);
             setCurrentReceiverPairIndex(endIndex);
@@ -233,7 +233,7 @@ public class LightTimeChart {
 
     }
 
-    private void removeRedundantPairs(){
+    private void removeRedundantPairs() {
         int lastLight = 0;
         long lastStamp = 0;
 
@@ -246,13 +246,12 @@ public class LightTimeChart {
             int currentLight = readingMessage.getLight();
             long currentStamp = readingMessage.getTimestamp();
 
-            if (currentStamp == lastStamp){
+            if (currentStamp == lastStamp) {
 
-                if (currentLight != lastLight){
+                if (currentLight != lastLight) {
                     withDiffLight++;
                     toRemove.add(readingMessage);
-                }
-                else{
+                } else {
                     withSameLight++;
                 }
             }
@@ -261,23 +260,23 @@ public class LightTimeChart {
             lastStamp = currentStamp;
         }
 
-        System.out.println("Overall count: " + (withDiffLight + withSameLight) );
-        System.out.println("same light count: " + (withSameLight) );
-        System.out.println("diff light count: " + (withDiffLight) );
+        System.out.println("Overall count: " + (withDiffLight + withSameLight));
+        System.out.println("same light count: " + (withSameLight));
+        System.out.println("diff light count: " + (withDiffLight));
 
         lightReadings.removeAll(toRemove);
     }
 
-    public void setByteDuration(Integer duration){
+    public void setByteDuration(Integer duration) {
 
         durationSpinner.getValueFactory().setValue(duration);
     }
 
-    public long getByteDuration(){
+    public long getByteDuration() {
         return durationSpinner.getValue();
     }
 
-    public ReadOnlyObjectProperty<Integer> byteDurationProperty(){
+    public ReadOnlyObjectProperty<Integer> byteDurationProperty() {
         return durationSpinner.valueProperty();
     }
 

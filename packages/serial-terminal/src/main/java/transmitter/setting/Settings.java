@@ -1,4 +1,4 @@
-package transmitter.source.setting;
+package transmitter.setting;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -19,49 +19,49 @@ public class Settings {
 
     private final static ObservableList<SettingChangeListener> changeListeners = FXCollections.observableArrayList();
 
-    public static int getInteger(SettingKey key){
+    public static int getInteger(SettingKey key) {
         return prefs.getInt(key.key, (Integer) key.defaultValue);
     }
 
-    public static void putInteger(SettingKey key, int val){
+    public static void putInteger(SettingKey key, int val) {
         prefs.putInt(key.key, val);
     }
 
-    public static String getString(SettingKey key){
+    public static String getString(SettingKey key) {
         return prefs.get(key.key, (String) key.defaultValue);
     }
 
-    public static void putString(SettingKey key, String val){
+    public static void putString(SettingKey key, String val) {
         prefs.put(key.key, val);
     }
 
-    public static long getLong(SettingKey key){
+    public static long getLong(SettingKey key) {
         return prefs.getLong(key.key, (long) key.defaultValue);
     }
 
-    public static void putLong(SettingKey key, long val){
+    public static void putLong(SettingKey key, long val) {
         prefs.putLong(key.key, val);
     }
-
 
     public static void flush() throws BackingStoreException {
         prefs.flush();
     }
 
-    public static void invokeChangeListeners(List<SettingKey> changedKeys){
+    public static void invokeChangeListeners(List<SettingKey> changedKeys) {
         Platform.runLater(() -> {
             for (SettingChangeListener changeListener : changeListeners) {
                 changeListener.Changed(changedKeys);
             }
         });
     }
+
     public static void setSettingsFromMap(Map<SettingKey, Object> settingsMap) throws BackingStoreException {
 
         settingsMap.forEach((key, val) -> {
             if (key.type == Integer.class)
                 putInteger(key, (Integer) val);
-//            else if (key.type == Long.class)
-//                putLong()
+            // else if (key.type == Long.class)
+            // putLong()
             else if (key.type == String.class)
                 putString(key, (String) val);
             else
@@ -71,7 +71,7 @@ public class Settings {
         flush();
     }
 
-    public static Map<SettingKey, Object> getSettingsMap(){
+    public static Map<SettingKey, Object> getSettingsMap() {
 
         ObservableMap<SettingKey, Object> settingsMap = FXCollections.observableHashMap();
         for (SettingKey key : SettingKey.values()) {
@@ -84,7 +84,7 @@ public class Settings {
             else if (key.type == Long.class)
                 value = getLong(key);
             else
-                throw new IllegalStateException("Unknown setting type " + key.type + " for key "+ key);
+                throw new IllegalStateException("Unknown setting type " + key.type + " for key " + key);
 
             settingsMap.put(key, value);
         }
@@ -92,7 +92,7 @@ public class Settings {
         return settingsMap;
     }
 
-    public static void addChangeListener(SettingChangeListener listener){
+    public static void addChangeListener(SettingChangeListener listener) {
         changeListeners.add(listener);
     }
 }

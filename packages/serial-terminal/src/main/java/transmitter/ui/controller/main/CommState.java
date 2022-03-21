@@ -1,4 +1,4 @@
-package transmitter.source.ui.controller.main;
+package transmitter.ui.controller.main;
 
 public enum CommState {
     TRANSMITTING,

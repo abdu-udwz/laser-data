@@ -1,32 +1,30 @@
-package transmitter.source.connection.serial;
+package transmitter.connection.serial;
 
 import com.fazecast.jSerialComm.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import transmitter.source.connection.BAO;
-import transmitter.source.connection.BaudRate;
-import transmitter.source.connection.serial.listener.InMessageListener;
-import transmitter.source.connection.serial.listener.InMessageListenerType;
-import transmitter.source.message.in.InMessage;
-import transmitter.source.message.in.InfoMessage;
-import transmitter.source.message.in.LightReadingMessage;
-import transmitter.source.message.in.error.ErrorMessage;
-import transmitter.source.util.Threading;
+import transmitter.connection.BAO;
+import transmitter.connection.BaudRate;
+import transmitter.connection.serial.listener.InMessageListener;
+import transmitter.connection.serial.listener.InMessageListenerType;
+import transmitter.message.in.InMessage;
+import transmitter.message.in.InfoMessage;
+import transmitter.message.in.LightReadingMessage;
+import transmitter.message.in.error.ErrorMessage;
+import transmitter.util.Threading;
 
-public class Serial{
+public class Serial {
 
     private final SerialPort serialPort;
 
-    private final ObservableList<InMessageListener<LightReadingMessage>> lightReadListeners =
-                FXCollections.observableArrayList();
+    private final ObservableList<InMessageListener<LightReadingMessage>> lightReadListeners = FXCollections
+            .observableArrayList();
 
-    private final ObservableList<InMessageListener<InfoMessage>> infoListeners =
-                FXCollections.observableArrayList();
+    private final ObservableList<InMessageListener<InfoMessage>> infoListeners = FXCollections.observableArrayList();
 
-    private final ObservableList<InMessageListener<ErrorMessage>> errorListeners =
-                FXCollections.observableArrayList();
+    private final ObservableList<InMessageListener<ErrorMessage>> errorListeners = FXCollections.observableArrayList();
 
     private final BooleanProperty open = new SimpleBooleanProperty(false);
 
@@ -38,11 +36,11 @@ public class Serial{
         initListeners();
     }
 
-    private void initListeners(){
+    private void initListeners() {
 
         openProperty().addListener((observable, oldValue, open) -> {
 
-            if (open){
+            if (open) {
                 serialPort.openPort();
 
                 serialPort.addDataListener(new SerialPortMessageListener() {
@@ -67,20 +65,20 @@ public class Serial{
                         onDataReceived(event.getReceivedData());
                     }
                 });
-            }
-            else {
+            } else {
                 serialPort.removeDataListener();
                 serialPort.closePort();
             }
         });
     }
 
-    private void onDataReceived(byte[] data){
+    private void onDataReceived(byte[] data) {
 
         Runnable dataProcess = new Runnable() {
 
             StringBuilder messageBuilder = new StringBuilder();
-//
+
+            //
             @Override
             public void run() {
                 String receivedString = new String(data);
@@ -92,13 +90,12 @@ public class Serial{
 
                     int messageLength = message.length();
 
-                    if (messageLength > BAO.EVENT_PREFIX.length() && message.endsWith("&")){
+                    if (messageLength > BAO.EVENT_PREFIX.length() && message.endsWith("&")) {
                         callInMessageListeners(message);
                         messageBuilder.delete(0, messageLength + 1);
-                    }
-                    else if (messageLength <= BAO.EVENT_PREFIX.length() && message.endsWith("&")){
+                    } else if (messageLength <= BAO.EVENT_PREFIX.length() && message.endsWith("&")) {
 
-                        System.out.println("...clearing noise in buffer ["+messageBuilder+"]");
+                        System.out.println("...clearing noise in buffer [" + messageBuilder + "]");
                         messageBuilder.delete(0, messageLength + 1);
                         serialPort.clearBreak();
                     }
@@ -110,7 +107,7 @@ public class Serial{
         Threading.SERIAL_EVENTS_POOL.submit(dataProcess);
     }
 
-    private void callInMessageListeners(final String message){
+    private void callInMessageListeners(final String message) {
 
         InMessageListenerType toCallType = listenerTypeForMessage(message);
         String eventMessage = message.substring(BAO.EVENT_PREFIX.length());
@@ -119,24 +116,21 @@ public class Serial{
             System.out.println(message);
         }
 
-        if (toCallType == InMessageListenerType.BOARD_ERROR){
+        if (toCallType == InMessageListenerType.BOARD_ERROR) {
             for (InMessageListener<ErrorMessage> listener : errorListeners) {
                 listener.handel(new ErrorMessage(eventMessage));
             }
-        }
-        else if (toCallType == InMessageListenerType.BOARD_INFO){
+        } else if (toCallType == InMessageListenerType.BOARD_INFO) {
             for (InMessageListener<InfoMessage> listener : infoListeners) {
                 listener.handel(new InfoMessage(eventMessage));
             }
-        }
-        else if (toCallType == InMessageListenerType.LIGHT_READ){
-//            System.out.println(message);
-//            System.out.println("[Serial.java] " + message);
+        } else if (toCallType == InMessageListenerType.LIGHT_READ) {
+            // System.out.println(message);
+            // System.out.println("[Serial.java] " + message);
             for (InMessageListener<LightReadingMessage> listener : lightReadListeners) {
                 listener.handel(new LightReadingMessage(eventMessage));
             }
-        }
-        else {
+        } else {
             System.err.println("Couldn't determine listener for message: " + message);
         }
     }
@@ -150,13 +144,14 @@ public class Serial{
 
     private int prevStart = 0;
     private int prevEnd = 0;
-    private void transmitterTimeBugTest(InMessageListenerType toCallType, String eventMessage){
 
-        if (toCallType == InMessageListenerType.BOARD_INFO){
+    private void transmitterTimeBugTest(InMessageListenerType toCallType, String eventMessage) {
+
+        if (toCallType == InMessageListenerType.BOARD_INFO) {
 
             boolean isStart = false;
 
-            if (eventMessage.contains("st_") || eventMessage.contains("et_")){
+            if (eventMessage.contains("st_") || eventMessage.contains("et_")) {
                 isStart = eventMessage.contains("st_");
 
                 int startIndex = eventMessage.indexOf('*') + 1;
@@ -168,15 +163,14 @@ public class Serial{
 
                     if (prevStart != 0) {
 
-                        if (prevEnd != 0){
+                        if (prevEnd != 0) {
                             System.out.println("time since last byte end: " + (timestamp - prevEnd));
                         }
                     }
                     prevStart = timestamp;
-                }
-                else{
+                } else {
 
-                    if (prevStart != 0){
+                    if (prevStart != 0) {
                         System.out.println("time since i started: " + (timestamp - prevStart));
                     }
 
@@ -187,13 +181,15 @@ public class Serial{
         }
     }
 
-    /* ********************************************************** *
-     *                                                            *
-     *                            Utils                           *
-     *                                                            *
-     * ********************************************************** */
+    /*
+     * ********************************************************** *
+     * *
+     * Utils *
+     * *
+     * **********************************************************
+     */
 
-    private InMessageListenerType listenerTypeForMessage(String message){
+    private InMessageListenerType listenerTypeForMessage(String message) {
 
         for (InMessageListenerType value : InMessageListenerType.values()) {
             if (message.contains(value.getPattern()))
@@ -203,14 +199,13 @@ public class Serial{
         return InMessageListenerType.UNKNOWN;
     }
 
-    private void checkPortOpen(){
-        if (! serialPort.isOpen())
+    private void checkPortOpen() {
+        if (!serialPort.isOpen())
             throw new IllegalStateException("Serial port is not open, cannot write/read.");
     }
 
-
     public void addInMessageListener(InMessageListenerType listenerType,
-                                     InMessageListener<? extends InMessage> listener){
+            InMessageListener<? extends InMessage> listener) {
         if (listenerType == InMessageListenerType.BOARD_ERROR)
             errorListeners.add((InMessageListener<ErrorMessage>) listener);
 
@@ -225,23 +220,24 @@ public class Serial{
     }
 
     public void removeInMessageListener(InMessageListenerType listenerType,
-                                        InMessageListener<? extends InMessage> listener){
+            InMessageListener<? extends InMessage> listener) {
         if (listenerType == InMessageListenerType.BOARD_ERROR)
             errorListeners.removeIf(listener1 -> listener1 == listener);
 
-        else if (listenerType == InMessageListenerType.BOARD_INFO){
+        else if (listenerType == InMessageListenerType.BOARD_INFO) {
             infoListeners.removeIf(listener1 -> listener1 == listener);
         }
 
         else if (listenerType == InMessageListenerType.LIGHT_READ)
             lightReadListeners.removeIf(listener1 -> listener1 == listener);
 
-
     }
 
-    /* ********************************************************** *
-     *                  setter & getters                          *
-     * ********************************************************** */
+    /*
+     * ********************************************************** *
+     * setter & getters *
+     * **********************************************************
+     */
 
     public boolean isOpen() {
         return serialPort.isOpen();
@@ -291,7 +287,7 @@ public class Serial{
         return serialPort.clearRTS();
     }
 
-    public SerialPort getNativeSerial(){
+    public SerialPort getNativeSerial() {
         return this.serialPort;
     }
 }

@@ -1,20 +1,20 @@
-package transmitter.source.connection;
+package transmitter.connection;
 
 import com.fazecast.jSerialComm.SerialPort;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
-import transmitter.source.connection.data.Packet;
-import transmitter.source.connection.data.Packets;
-import transmitter.source.connection.protocol.LaserProtocol;
-import transmitter.source.connection.serial.listener.InMessageListener;
-import transmitter.source.connection.serial.listener.InMessageListenerType;
-import transmitter.source.connection.serial.Serial;
-import transmitter.source.message.Messages;
-import transmitter.source.message.in.InfoMessage;
-import transmitter.source.setting.SettingKey;
-import transmitter.source.setting.Settings;
-import transmitter.source.util.logging.Logging;
+import transmitter.connection.data.Packet;
+import transmitter.connection.data.Packets;
+import transmitter.connection.protocol.LaserProtocol;
+import transmitter.connection.serial.listener.InMessageListener;
+import transmitter.connection.serial.listener.InMessageListenerType;
+import transmitter.connection.serial.Serial;
+import transmitter.message.Messages;
+import transmitter.message.in.InfoMessage;
+import transmitter.setting.SettingKey;
+import transmitter.setting.Settings;
+import transmitter.util.logging.Logging;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -23,7 +23,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
 public class BAO {
-
 
     public static final String PROTOCOL_PREFIX = "alp://";
     public static final String EVENT_PREFIX = PROTOCOL_PREFIX + "cevnt/";
@@ -44,7 +43,7 @@ public class BAO {
         return serial.isOpen();
     }
 
-    public static Task<Boolean> disconnect(){
+    public static Task<Boolean> disconnect() {
         return new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
@@ -57,7 +56,7 @@ public class BAO {
 
     /* ######################################################################### */
 
-    public static Task<Boolean> changeReceiverState(boolean turnOn){
+    public static Task<Boolean> changeReceiverState(boolean turnOn) {
         return new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
@@ -65,8 +64,8 @@ public class BAO {
                 CountDownLatch latch = new CountDownLatch(1);
 
                 InMessageListener<InfoMessage> locker = message -> {
-                    if ( (turnOn && message.ofType(InfoMessage.RECEIVER_ON)) ||
-                            (! turnOn && message.ofType(InfoMessage.RECEIVER_STANDBY)) ) {
+                    if ((turnOn && message.ofType(InfoMessage.RECEIVER_ON)) ||
+                            (!turnOn && message.ofType(InfoMessage.RECEIVER_STANDBY))) {
                         latch.countDown();
 
                     }
@@ -75,25 +74,26 @@ public class BAO {
                 serial().addInMessageListener(InMessageListenerType.BOARD_INFO, locker);
 
                 String message = Messages.R_RECEIVE.message();
-                if (! turnOn)
+                if (!turnOn)
                     message = Messages.R_STANDBY.message();
 
                 boolean succeed = false;
 
-                logReceiver(Level.INFO, String.format("Attempting to change receiver state to %s", turnOn? "On" : "Off"));
+                logReceiver(Level.INFO,
+                        String.format("Attempting to change receiver state to %s", turnOn ? "On" : "Off"));
                 for (int i = 0; i < 8; i++) { // try a few couple times
                     if (succeed)
                         break;
 
-                    logReceiver(Level.INFO, String.format("...Attempt %d.", i+1));
+                    logReceiver(Level.INFO, String.format("...Attempt %d.", i + 1));
 
                     serial().sendMessage(message);
                     succeed = latch.await(1500, TimeUnit.MILLISECONDS);
                 }
 
-                if (! succeed)
+                if (!succeed)
                     throw new TimeoutException("Board receiver state couldn't be changed to " + turnOn);
-                else{
+                else {
                     logReceiver(Level.FINEST, "Board sent receiver reply. Receiver stated changed successfully");
                 }
 
@@ -104,7 +104,7 @@ public class BAO {
         };
     }
 
-    public static Task<Boolean> transmitText(String text, LaserProtocol protocol){
+    public static Task<Boolean> transmitText(String text, LaserProtocol protocol) {
         return new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
@@ -123,23 +123,24 @@ public class BAO {
         };
     }
 
-    public static Task<Boolean> transmitPackets(List<Packet> srcPackets, int byteDuration){
+    public static Task<Boolean> transmitPackets(List<Packet> srcPackets, int byteDuration) {
         return new Task<Boolean>() {
 
             private final List<Packet> packets = srcPackets;
             private final long packetInterval = byteDuration * 3;
             private final int totalBytesCount = Packets.countSize(packets);
-            private final long totalTransmitTime = (totalBytesCount * byteDuration) + (srcPackets.size() * packetInterval);
+            private final long totalTransmitTime = (totalBytesCount * byteDuration)
+                    + (srcPackets.size() * packetInterval);
             private long remainingTime = totalTransmitTime;
 
             @Override
             protected Boolean call() throws Exception {
                 String logMessage = String.format("Transmitting %d packet(s).%n" +
-                                                "\tEstimated time: %d ms.%n" +
-                                                "\tBetween-packet interval: %d ms.",
-                                                packets.size(),
-                                                totalTransmitTime,
-                                                packetInterval);
+                        "\tEstimated time: %d ms.%n" +
+                        "\tBetween-packet interval: %d ms.",
+                        packets.size(),
+                        totalTransmitTime,
+                        packetInterval);
 
                 logTransmitter(Level.INFO, logMessage);
 
@@ -161,7 +162,8 @@ public class BAO {
                         for (String binaryString : packet.getBinaryStrings()) {
 
                             if (isCancelled()) {
-                                throw new InterruptedException("Packet at index " + packet.index() + " was interrupted while transmitting.");
+                                throw new InterruptedException(
+                                        "Packet at index " + packet.index() + " was interrupted while transmitting.");
                             }
 
                             String transmitterMessage = Messages.T_TRANSMIT.message(binaryString);
@@ -175,7 +177,7 @@ public class BAO {
                         }
                         serial().sendMessage(Messages.T_TRANSMIT.message("end"));
 
-                        if (i != packets.size() -1){
+                        if (i != packets.size() - 1) {
                             // wait for the noise after the packet..
                             Thread.sleep(packetInterval);
                         }
@@ -186,13 +188,13 @@ public class BAO {
                 // next transmit task will create its own listeners
                 serial().removeInMessageListener(InMessageListenerType.BOARD_INFO, listener);
 
-                logMessage = String.format("Successfully transmitted a total size of %d bytes.",byteCount );
+                logMessage = String.format("Successfully transmitted a total size of %d bytes.", byteCount);
                 logTransmitter(Level.FINEST, logMessage);
                 return true;
             }
 
-            private void updateTaskInfo(int doneCount){
-                double remainingSeconds = ((double)remainingTime) / 1000;
+            private void updateTaskInfo(int doneCount) {
+                double remainingSeconds = ((double) remainingTime) / 1000;
                 String message = String.format("%d * %d & %f", doneCount, totalBytesCount, remainingSeconds);
                 updateMessage(message);
             }
@@ -200,7 +202,7 @@ public class BAO {
         };
     }
 
-    public static Task<Boolean> setupBoard(){
+    public static Task<Boolean> setupBoard() {
         return new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
@@ -223,7 +225,7 @@ public class BAO {
 
                 String boardInitializedMessage = Messages.BOARD_INITIALIZE.message(true);
 
-                synchronized (SETUP_LOCK){
+                synchronized (SETUP_LOCK) {
 
                     InMessageListener<InfoMessage> setupListener = message -> {
                         // use synchronized block. on another thread
@@ -273,7 +275,7 @@ public class BAO {
         };
     }
 
-    public static Task<Boolean> resetBoard(){
+    public static Task<Boolean> resetBoard() {
         return new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
@@ -283,10 +285,10 @@ public class BAO {
 
                 InMessageListener<InfoMessage> resetListener = message -> {
 
-                    synchronized (lock){
+                    synchronized (lock) {
                         if (message.ofType(InfoMessage.TRANSMITTER_STANDBY) ||
                                 message.ofType(InfoMessage.RECEIVER_STANDBY) ||
-                                    message.ofType(InfoMessage.DEINITIALIZED))
+                                message.ofType(InfoMessage.DEINITIALIZED))
                             lock.notify();
                     }
                 };
@@ -312,7 +314,7 @@ public class BAO {
     }
 
     public static Serial serial() {
-        if (SERIAL.get() == null){
+        if (SERIAL.get() == null) {
             throw new IllegalStateException("There's no connection to board, connect first");
         }
 
@@ -327,8 +329,7 @@ public class BAO {
         BAO.SERIAL.set(serial);
     }
 
-
-    private static void logTransmitter(Level level, String message){
+    private static void logTransmitter(Level level, String message) {
         Logging.logTerminal(TRANSMITTER_TERMINAL, level, message);
     }
 

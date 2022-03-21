@@ -1,4 +1,4 @@
-package transmitter.source.util;
+package transmitter.util;
 
 import com.sun.istack.internal.NotNull;
 
@@ -13,7 +13,6 @@ public class Res {
     private final static String PROPERTIES = RESOURCES + "properties/";
     private final static String FXML = RESOURCES + "fxml/";
 
-
     private final static String IMAGE = RESOURCES + "image/";
     private final static String ICONS = IMAGE + "icons/";
 
@@ -24,10 +23,11 @@ public class Res {
     final static String DEFAULT_PROPERTIES = "transmitter.resources.properties.default";
 
     public enum Image {
-        CRESTYANO            (IMAGE + "players_photos/Crestyano.jpg");
+        CRESTYANO(IMAGE + "players_photos/Crestyano.jpg");
 
         final String url;
-        Image(String url){
+
+        Image(String url) {
             this.url = url;
         }
 
@@ -38,19 +38,20 @@ public class Res {
     }
 
     public enum Fxml {
-        MAIN_WINDOW             (FXML + "MainWindow.fxml"                ),
-        MESSENGER_WINDOW         (FXML + "MessengerWindow.fxml"         ),
-        PAINT_WINDOW            (FXML + "PaintController.fxml"            ),
-        TERMINAL_WINDOW         (FXML + "TerminalWindow.fxml"            ),
-        SETTINGS_WINDOW         (FXML + "SettingsWindow.fxml"            ),
-        CONNECT_DIALOG_LAYOUT   ( FXML + "ConnectionAlertLayout.fxml"   ),
+        MAIN_WINDOW(FXML + "MainWindow.fxml"),
+        MESSENGER_WINDOW(FXML + "MessengerWindow.fxml"),
+        PAINT_WINDOW(FXML + "PaintController.fxml"),
+        TERMINAL_WINDOW(FXML + "TerminalWindow.fxml"),
+        SETTINGS_WINDOW(FXML + "SettingsWindow.fxml"),
+        CONNECT_DIALOG_LAYOUT(FXML + "ConnectionAlertLayout.fxml"),
 
-        LIGHT_TIME_CHART        (DEVELOPER + "LightTimeChart.fxml"       ),
+        LIGHT_TIME_CHART(DEVELOPER + "LightTimeChart.fxml"),
         INFO_ALERT_DETAILS_LAYOUT(DIALOGS + "InfoAlertDetailsLayout.fxml"),
-        CUSTOM_ALERT_LAYOUT      (DIALOGS + "CustomAlertLayout.fxml"     );
+        CUSTOM_ALERT_LAYOUT(DIALOGS + "CustomAlertLayout.fxml");
 
         private final String url;
-        Fxml(String url){
+
+        Fxml(String url) {
             this.url = url;
         }
 
@@ -67,11 +68,12 @@ public class Res {
     }
 
     public enum Stylesheet {
-        TEMPLATES                   (STYLE_SHEET + "template.css"),
-        THEME                       (STYLE_SHEET + "theme.css"),
-        DEFAULT_CUSTOM_ALERT_STYLE  (STYLE_SHEET + "default-custom-alert-style.css");
+        TEMPLATES(STYLE_SHEET + "template.css"),
+        THEME(STYLE_SHEET + "theme.css"),
+        DEFAULT_CUSTOM_ALERT_STYLE(STYLE_SHEET + "default-custom-alert-style.css");
 
         private final String url;
+
         Stylesheet(String url) {
             this.url = url;
         }
@@ -82,8 +84,7 @@ public class Res {
         }
     }
 
-    public static ResourceBundle getBundle(String language){
+    public static ResourceBundle getBundle(String language) {
         return ResourceBundle.getBundle(LANGUAGE_PATH, Locale.forLanguageTag(language));
     }
 }
-

@@ -1,4 +1,4 @@
-package transmitter.source.ui.controller;
+package transmitter.ui.controller;
 
 import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
@@ -10,56 +10,78 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
-import transmitter.source.socket.SocketIdentity;
-import transmitter.source.ui.controls.alert.AlertAction;
-import transmitter.source.connection.BaudRate;
-import transmitter.source.encode.Determiner;
-import transmitter.source.setting.SettingKey;
-import transmitter.source.setting.Settings;
-import transmitter.source.ui.Alerts;
-import transmitter.source.util.Windows;
+import transmitter.socket.SocketIdentity;
+import transmitter.ui.controls.alert.AlertAction;
+import transmitter.connection.BaudRate;
+import transmitter.encode.Determiner;
+import transmitter.setting.SettingKey;
+import transmitter.setting.Settings;
+import transmitter.ui.Alerts;
+import transmitter.util.Windows;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static transmitter.source.util.Utils.customCellFactory;
+import static transmitter.util.Utils.customCellFactory;
 
 public class SettingsController {
 
-    @FXML private JFXButton serialCategoryButton;
-    @FXML private JFXButton commCategoryButton;
+    @FXML
+    private JFXButton serialCategoryButton;
+    @FXML
+    private JFXButton commCategoryButton;
 
-    @FXML private VBox settingsContentContainer;
-    @FXML private StackPane categoryStack;
+    @FXML
+    private VBox settingsContentContainer;
+    @FXML
+    private StackPane categoryStack;
 
-    @FXML private VBox serialContentPane;
+    @FXML
+    private VBox serialContentPane;
 
-    @FXML private JFXComboBox<BaudRate> baudRateCombo;
-    @FXML private JFXComboBox<Integer> transmitterPinCombo;
-    @FXML private JFXComboBox<Integer> receiverPinCombo;
+    @FXML
+    private JFXComboBox<BaudRate> baudRateCombo;
+    @FXML
+    private JFXComboBox<Integer> transmitterPinCombo;
+    @FXML
+    private JFXComboBox<Integer> receiverPinCombo;
 
-    @FXML private JFXComboBox<SocketIdentity> socketIdentityCombo;
-    @FXML private JFXTextField socketHostField;
+    @FXML
+    private JFXComboBox<SocketIdentity> socketIdentityCombo;
+    @FXML
+    private JFXTextField socketHostField;
 
-    @FXML private JFXButton cancelButton;
-    @FXML private JFXButton okButton;
+    @FXML
+    private JFXButton cancelButton;
+    @FXML
+    private JFXButton okButton;
 
-    @FXML private VBox commContentPane;
+    @FXML
+    private VBox commContentPane;
 
-    @FXML private JFXSlider bitDelaySlider;
-    @FXML private Label bitDelayLabel;
-    @FXML private JFXComboBox<Determiner> determinerCombo;
-    @FXML private JFXComboBox<String> encodingCombo;
+    @FXML
+    private JFXSlider bitDelaySlider;
+    @FXML
+    private Label bitDelayLabel;
+    @FXML
+    private JFXComboBox<Determiner> determinerCombo;
+    @FXML
+    private JFXComboBox<String> encodingCombo;
 
-    @FXML private JFXSlider packetSizeSlider;
-    @FXML private Label packetSizeLabel;
+    @FXML
+    private JFXSlider packetSizeSlider;
+    @FXML
+    private Label packetSizeLabel;
 
-    @FXML private JFXSlider highValueSlider;
-    @FXML private Label highValueLabel;
-    @FXML private JFXSlider byteCorrectionSlider;
-    @FXML private Label byteCorrectionLabel;
-
+    @FXML
+    private JFXSlider highValueSlider;
+    @FXML
+    private Label highValueLabel;
+    @FXML
+    private JFXSlider byteCorrectionSlider;
+    @FXML
+    private Label byteCorrectionLabel;
 
     @FunctionalInterface
     private interface SettingSetter {
@@ -70,7 +92,7 @@ public class SettingsController {
     private final ObservableMap<SettingKey, Supplier<Object>> currentSettings = FXCollections.observableHashMap();
 
     @FXML
-    private void initialize(){
+    private void initialize() {
 
         initListeners();
         initComponents();
@@ -82,8 +104,8 @@ public class SettingsController {
         loadSettings(Settings.getSettingsMap());
     }
 
-    private void initMapping(){
-        settingNodesMap.put(SettingKey.BAUD_RATE, () ->  {
+    private void initMapping() {
+        settingNodesMap.put(SettingKey.BAUD_RATE, () -> {
             BaudRate baudRate = BaudRate.valueOf(Settings.getString(SettingKey.BAUD_RATE));
             baudRateCombo.setValue(baudRate);
         });
@@ -125,7 +147,7 @@ public class SettingsController {
         });
 
         settingNodesMap.put(SettingKey.LIGHT_HIGH_VALUE, () -> {
-            int highRate  = Settings.getInteger(SettingKey.LIGHT_HIGH_VALUE);
+            int highRate = Settings.getInteger(SettingKey.LIGHT_HIGH_VALUE);
             highValueSlider.setValue(highRate);
         });
 
@@ -141,25 +163,23 @@ public class SettingsController {
         currentSettings.put(SettingKey.SOCKET_IDENTITY, () -> socketIdentityCombo.getValue().name());
         currentSettings.put(SettingKey.SOCKET_HOST, () -> socketHostField.getText());
 
-        currentSettings.put(SettingKey.BIT_DELAY, () -> (int)bitDelaySlider.getValue());
+        currentSettings.put(SettingKey.BIT_DELAY, () -> (int) bitDelaySlider.getValue());
         currentSettings.put(SettingKey.PACKET_DETERMINER, () -> determinerCombo.getValue().toString());
-        currentSettings.put(SettingKey.TEXT_ENCODING_CHARSET, ()-> encodingCombo.getValue());
+        currentSettings.put(SettingKey.TEXT_ENCODING_CHARSET, () -> encodingCombo.getValue());
 
-        currentSettings.put(SettingKey.PACKET_SIZE, () -> (int)packetSizeSlider.getValue());
+        currentSettings.put(SettingKey.PACKET_SIZE, () -> (int) packetSizeSlider.getValue());
 
         currentSettings.put(SettingKey.LIGHT_HIGH_VALUE, () -> (int) highValueSlider.getValue());
         currentSettings.put(SettingKey.BYTE_CORRECTION, () -> (int) byteCorrectionSlider.getValue());
     }
 
-    private void initComponents(){
+    private void initComponents() {
 
-        Callback<Boolean, JFXListCell<BaudRate>> baudCellFactory =
-                customCellFactory( rate -> String.valueOf(rate.val));
+        Callback<Boolean, JFXListCell<BaudRate>> baudCellFactory = customCellFactory(rate -> String.valueOf(rate.val));
         baudRateCombo.setButtonCell(baudCellFactory.call(true));
         baudRateCombo.setCellFactory(param -> baudCellFactory.call(false));
 
-        Callback<Boolean, JFXListCell<Integer>> analogPinCellFactory =
-                customCellFactory( pinNum -> "A"+ pinNum );
+        Callback<Boolean, JFXListCell<Integer>> analogPinCellFactory = customCellFactory(pinNum -> "A" + pinNum);
         receiverPinCombo.setButtonCell(analogPinCellFactory.call(true));
         receiverPinCombo.setCellFactory(p -> analogPinCellFactory.call(true));
 
@@ -178,8 +198,8 @@ public class SettingsController {
 
         // ======== SOCKET SETTINGS ==========//
 
-        Callback<Boolean, JFXListCell<SocketIdentity>> socketIdentityCellFactory =
-                customCellFactory( identity -> identity.displayString);
+        Callback<Boolean, JFXListCell<SocketIdentity>> socketIdentityCellFactory = customCellFactory(
+                identity -> identity.displayString);
         socketIdentityCombo.setButtonCell(socketIdentityCellFactory.call(true));
         socketIdentityCombo.setCellFactory(param -> socketIdentityCellFactory.call(false));
         socketIdentityCombo.getItems().addAll(SocketIdentity.values());
@@ -190,8 +210,8 @@ public class SettingsController {
         bitDelaySlider.setMajorTickUnit(8);
         bitDelaySlider.setMinorTickCount(3);
 
-        Callback<Boolean, JFXListCell<Determiner>> determinerCellFactory =
-                customCellFactory( determiner -> "D"+determiner.index + " - ("+ determiner.string + ")");
+        Callback<Boolean, JFXListCell<Determiner>> determinerCellFactory = customCellFactory(
+                determiner -> "D" + determiner.index + " - (" + determiner.string + ")");
 
         determinerCombo.setButtonCell(determinerCellFactory.call(true));
         determinerCombo.setCellFactory(p -> determinerCellFactory.call(false));
@@ -222,10 +242,9 @@ public class SettingsController {
         highValueSlider.setMinorTickCount(0);
         highValueSlider.setMajorTickUnit(180);
 
-
     }
 
-    private void initListeners(){
+    private void initListeners() {
 
         setSliderLabel(bitDelaySlider, bitDelayLabel, "ms");
         setSliderLabel(packetSizeSlider, packetSizeLabel, "bytes");
@@ -244,14 +263,14 @@ public class SettingsController {
         commCategoryButton.setOnAction(event -> categoryStack.getChildren().setAll(commContentPane));
     }
 
-    private void loadSettings(Map<SettingKey,Object> settingMap){
+    private void loadSettings(Map<SettingKey, Object> settingMap) {
 
         settingMap.forEach((key, val) -> {
 
             SettingSetter settingSetter = settingNodesMap.get(key);
-            if (settingSetter == null){
+            if (settingSetter == null) {
                 return;
-//                throw new NullPointerException("Could not find node setter. key="+ key );
+                // throw new NullPointerException("Could not find node setter. key="+ key );
             }
 
             settingSetter.set();
@@ -262,7 +281,7 @@ public class SettingsController {
         byteCorrectionSlider.adjustValue(Settings.getInteger(SettingKey.BYTE_CORRECTION));
     }
 
-    private void okButtonAction(){
+    private void okButtonAction() {
 
         Map<SettingKey, Object> changedSettings = getChangedSettings();
         if (changedSettings.size() > 0) {
@@ -283,9 +302,9 @@ public class SettingsController {
             saveTask.setOnFailed(event -> {
                 Alerts.errorAlert(Windows.SETTINGS_WINDOW,
                         "Couldn't Save Settings",
-                          "An error occurred while saving settings, please try again later.\n\nIf this error occurred again refer to the developer",
-                                event.getSource().getException(),
-                                AlertAction.OK);
+                        "An error occurred while saving settings, please try again later.\n\nIf this error occurred again refer to the developer",
+                        event.getSource().getException(),
+                        AlertAction.OK);
             });
 
             saveTask.setOnSucceeded(event -> {
@@ -293,14 +312,13 @@ public class SettingsController {
             });
 
             new Thread(saveTask).start();
-        }
-        else{
+        } else {
             Windows.SETTINGS_WINDOW.close();
         }
 
     }
 
-    private Map<SettingKey, Object> getChangedSettings(){
+    private Map<SettingKey, Object> getChangedSettings() {
 
         ObservableMap<SettingKey, Object> changedSettings = FXCollections.observableHashMap();
         Map<SettingKey, Object> originalSettings = Settings.getSettingsMap();
@@ -308,25 +326,26 @@ public class SettingsController {
         originalSettings.forEach((key, orgVal) -> {
             Supplier<Object> valueSupplier = currentSettings.get(key);
 
-            if (valueSupplier == null){
+            if (valueSupplier == null) {
                 return;
-//                throw new IllegalStateException("Settings Controller doesn't map setting key=" + key);
+                // throw new IllegalStateException("Settings Controller doesn't map setting
+                // key=" + key);
             }
 
             Object currentValue = valueSupplier.get();
             if (currentValue == null)
-                throw new NullPointerException("Setting value is null. key="+ key);
+                throw new NullPointerException("Setting value is null. key=" + key);
 
-            if (! currentValue.equals(orgVal))
+            if (!currentValue.equals(orgVal))
                 changedSettings.put(key, currentValue);
         });
 
         return changedSettings;
     }
 
-    private void syncCorrectionRangeWithDelay(int oldDelay, int newDelay){
+    private void syncCorrectionRangeWithDelay(int oldDelay, int newDelay) {
 
-        int maxByteCorrection = Math.round( newDelay / 2 ) -2;
+        int maxByteCorrection = Math.round(newDelay / 2) - 2;
         byteCorrectionSlider.setMax(maxByteCorrection);
 
         double oldCorrection = byteCorrectionSlider.getValue();
@@ -335,12 +354,14 @@ public class SettingsController {
 
     }
 
-    /* ************************************* *
-     *              Utils
+    /*
+     * ************************************* *
+     * Utils
      *
-     * ************************************* */
+     * *************************************
+     */
 
-    private void setSliderLabel(Slider slider, Label sliderLabel, String suffix){
+    private void setSliderLabel(Slider slider, Label sliderLabel, String suffix) {
 
         sliderLabel.setText(formatSliderLabel(((int) slider.getValue()), suffix));
         slider.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -348,11 +369,11 @@ public class SettingsController {
         });
     }
 
-    private String formatSliderLabel(int value, String suffix){
+    private String formatSliderLabel(int value, String suffix) {
         return String.format("%d %s", value, suffix);
     }
 
-    private <T> T getCurrentSetting(SettingKey key, Class<T> clazz){
+    private <T> T getCurrentSetting(SettingKey key, Class<T> clazz) {
         Supplier<Object> valSupplier = getCurrentSettingsMap().get(key);
         if (valSupplier == null)
             return null;
@@ -360,11 +381,11 @@ public class SettingsController {
             return (T) valSupplier.get();
     }
 
-    private Map<SettingKey, Supplier<Object>> getCurrentSettingsMap(){
+    private Map<SettingKey, Supplier<Object>> getCurrentSettingsMap() {
         return currentSettings;
     }
 
-    private void updateLoadingView(boolean loading){
+    private void updateLoadingView(boolean loading) {
         settingsContentContainer.setDisable(loading);
     }
 }

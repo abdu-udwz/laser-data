@@ -1,4 +1,4 @@
-package transmitter.source.ui.controls.alert;
+package transmitter.ui.controls.alert;
 
 import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXButton;
@@ -13,7 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import transmitter.source.util.Res;
+import transmitter.util.Res;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +24,15 @@ public class CustomAlert<T extends AlertLayout> extends JFXAlert<AlertAction> {
 
     private final ObservableList<AlertAction> alertActions = FXCollections.observableArrayList();
 
-    public CustomAlert(){
+    public CustomAlert() {
         this((AlertAction) null);
     }
 
-    public CustomAlert(AlertAction... actions){
+    public CustomAlert(AlertAction... actions) {
         this(null, actions);
     }
 
-    public CustomAlert(@Nullable Stage stage, AlertAction... actions){
+    public CustomAlert(@Nullable Stage stage, AlertAction... actions) {
         super(stage);
 
         setLayout((T) new AlertLayout());
@@ -50,15 +50,15 @@ public class CustomAlert<T extends AlertLayout> extends JFXAlert<AlertAction> {
         getDialogPane().getStylesheets().add(Res.Stylesheet.TEMPLATES.getUrl());
     }
 
-    private void prepareListeners(){
+    private void prepareListeners() {
 
         layoutProperty().addListener((observable, oldValue, newValue) -> {
             this.setContent(newValue);
         });
 
         getAlertActions().addListener((ListChangeListener<? super AlertAction>) c -> {
-            while(c.next()){
-                if (c.wasAdded()){
+            while (c.next()) {
+                if (c.wasAdded()) {
                     c.getAddedSubList().forEach(action -> {
 
                         final JFXButton actionButton = action.constructButton();
@@ -69,8 +69,7 @@ public class CustomAlert<T extends AlertLayout> extends JFXAlert<AlertAction> {
 
                         layout().actionsFlow.getChildren().add(actionButton);
                     });
-                }
-                else if(c.wasRemoved()){
+                } else if (c.wasRemoved()) {
                     List<Node> toRemove = new ArrayList<>();
 
                     c.getRemoved().forEach(action -> {
@@ -90,7 +89,7 @@ public class CustomAlert<T extends AlertLayout> extends JFXAlert<AlertAction> {
         return alertActions;
     }
 
-    protected T layout(){
+    protected T layout() {
         return this.getLayout();
     }
 
@@ -102,65 +101,64 @@ public class CustomAlert<T extends AlertLayout> extends JFXAlert<AlertAction> {
         return layout;
     }
 
-    public  void setLayout(T layout) {
+    public void setLayout(T layout) {
         this.layout.set(layout);
     }
 
-    public void setHeadingText(String text){
+    public void setHeadingText(String text) {
         layout().headingLabel.setText(text);
     }
 
-    public String getHeadingText(){
+    public String getHeadingText() {
         return layout().headingLabel.getText();
     }
 
-    public StringProperty headingTextProperty(){
+    public StringProperty headingTextProperty() {
         return layout().headingLabel.textProperty();
     }
 
-    public void setBodyText(String text){
+    public void setBodyText(String text) {
         layout().bodyLabel.setText(text);
     }
 
-    public String getBodyText(){
+    public String getBodyText() {
         return layout().bodyLabel.getText();
     }
 
-    public StringProperty bodyTextProperty(){
+    public StringProperty bodyTextProperty() {
         return layout().bodyLabel.textProperty();
     }
 
-    public void setGraphic(FontAwesomeIcon graphic){
+    public void setGraphic(FontAwesomeIcon graphic) {
         layout().graphicView.setIcon(graphic);
     }
 
-    public void setGraphicFill(Paint fill){
+    public void setGraphicFill(Paint fill) {
         layout().graphicView.setFill(fill);
     }
 
-    public Paint getGraphicFill(){
+    public Paint getGraphicFill() {
         return layout().graphicView.getFill();
     }
 
-    public ObjectProperty<Paint> fillProperty(){
+    public ObjectProperty<Paint> fillProperty() {
         return layout().graphicView.fillProperty();
     }
 
-//    protected FontAwesomeIcon getGraphic(){
-//        return layout()graphicView.getIcon();
-//    }
+    // protected FontAwesomeIcon getGraphic(){
+    // return layout()graphicView.getIcon();
+    // }
 
-//    protected ObjectProperty<FontAwesomeIcon> graphicProperty(){
-//        return layout()graphicView.icon();
-//    }
+    // protected ObjectProperty<FontAwesomeIcon> graphicProperty(){
+    // return layout()graphicView.icon();
+    // }
 
-    public void setGraphicSize(double size){
+    public void setGraphicSize(double size) {
         layout().graphicView.setGlyphSize(size);
     }
 
-    public Number getGraphicSize(){
+    public Number getGraphicSize() {
         return layout().graphicView.getGlyphSize();
     }
-
 
 }

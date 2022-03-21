@@ -1,4 +1,4 @@
-package transmitter.source.setting;
+package transmitter.setting;
 
 import java.util.List;
 

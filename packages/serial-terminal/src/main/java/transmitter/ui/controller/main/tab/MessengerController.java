@@ -1,4 +1,4 @@
-package transmitter.source.ui.controller.main.tab;
+package transmitter.ui.controller.main.tab;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXProgressBar;
@@ -13,29 +13,36 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.json.JSONException;
 import org.json.JSONObject;
-import transmitter.source.connection.BAO;
-import transmitter.source.connection.data.Packet;
-import transmitter.source.connection.data.Packets;
-import transmitter.source.connection.receiver.VirtualReceiver;
-import transmitter.source.socket.SocketManager;
-import transmitter.source.ui.controller.main.CommState;
-import transmitter.source.util.Threading;
+import transmitter.connection.BAO;
+import transmitter.connection.data.Packet;
+import transmitter.connection.data.Packets;
+import transmitter.connection.receiver.VirtualReceiver;
+import transmitter.socket.SocketManager;
+import transmitter.ui.controller.main.CommState;
+import transmitter.util.Threading;
 
 import java.net.Socket;
 
 public class MessengerController extends MainTabController {
 
-    @FXML private VBox messengerFlow;
+    @FXML
+    private VBox messengerFlow;
 
-    @FXML private HBox progressBox;
-    @FXML private Label percentageLabel;
-    @FXML private Label timeLabel;
-    @FXML private JFXProgressBar progressBar;
+    @FXML
+    private HBox progressBox;
+    @FXML
+    private Label percentageLabel;
+    @FXML
+    private Label timeLabel;
+    @FXML
+    private JFXProgressBar progressBar;
 
-    @FXML private HBox messageBox;
-    @FXML private JFXTextField messageField;
-    @FXML private JFXButton messageSendButton;
-
+    @FXML
+    private HBox messageBox;
+    @FXML
+    private JFXTextField messageField;
+    @FXML
+    private JFXButton messageSendButton;
 
     @FXML
     private void initialize() {
@@ -44,11 +51,11 @@ public class MessengerController extends MainTabController {
         updateStateScene(CommState.STANDBY);
     }
 
-    private void initComponents(){
-//        visualizeMessage("مرحبا", true);
-//        visualizeMessage("مرحبا", false);
-//        visualizeMessage("hey how are you? you doing good ", false);
-//        visualizeMessage("hey how are you? you doing good ", true);
+    private void initComponents() {
+        // visualizeMessage("مرحبا", true);
+        // visualizeMessage("مرحبا", false);
+        // visualizeMessage("hey how are you? you doing good ", false);
+        // visualizeMessage("hey how are you? you doing good ", true);
     }
 
     private void initListeners() {
@@ -73,13 +80,13 @@ public class MessengerController extends MainTabController {
     private void onStateChanged(CommState oldValue, CommState newValue) {
         updateStateScene(newValue);
 
-        if (newValue == CommState.RECEIVING){
+        if (newValue == CommState.RECEIVING) {
             initReceivingState();
         }
 
     }
 
-    private void initReceivingState(){
+    private void initReceivingState() {
         VirtualReceiver virtualReceiver = getMainController().getVirtualReceiver();
 
         virtualReceiver.addListener(packets -> {
@@ -89,7 +96,8 @@ public class MessengerController extends MainTabController {
             }
             String receivedMessage = Packets.toText(packets, virtualReceiver.getProtocol().getTextEncodingCharset());
 
-            System.out.println("=== received " + packets.size() + " packet(s) with a total of " + sizeSum + " byte(s).");
+            System.out
+                    .println("=== received " + packets.size() + " packet(s) with a total of " + sizeSum + " byte(s).");
             System.out.println(receivedMessage);
 
             SocketManager.emit(SocketManager.EVENT_MESSAGE_RECEIVED, receivedMessage);
@@ -97,14 +105,15 @@ public class MessengerController extends MainTabController {
         });
     }
 
-    private void sendMessage(){
+    private void sendMessage() {
 
         String messageText = messageField.getText();
         if (messageText.isEmpty())
             return;
 
         if (getMainControllerState() != CommState.STANDBY)
-            throw new IllegalStateException("Cannot transmit message when board isn't in standby mode, current state=["+ getMainControllerState()+"]");
+            throw new IllegalStateException("Cannot transmit message when board isn't in standby mode, current state=["
+                    + getMainControllerState() + "]");
 
         Task<Boolean> transmitTask = BAO.transmitText(messageText, getMainController().getProtocol());
 
@@ -134,32 +143,29 @@ public class MessengerController extends MainTabController {
             updateTransmitProgress(sentBytes, totalBytes, remainingSeconds);
         });
 
-
         Threading.FIXED_POOL.submit(transmitTask);
     }
 
-    private void updateStateScene(CommState state){
+    private void updateStateScene(CommState state) {
         boolean message;
         boolean progress;
 
-        if (state == CommState.TRANSMITTING){
+        if (state == CommState.TRANSMITTING) {
             message = false;
             progress = true;
-        }
-        else if (state == CommState.RECEIVING){
+        } else if (state == CommState.RECEIVING) {
             message = false;
             progress = false;
-        }
-        else{
+        } else {
             message = true;
             progress = false;
         }
-        messageBox.setDisable(! message);
+        messageBox.setDisable(!message);
         progressBox.setVisible(progress);
         progressBox.setManaged(progress);
     }
 
-    private void visualizeMessage(String msgText, boolean sent){
+    private void visualizeMessage(String msgText, boolean sent) {
         HBox container = new HBox(new Label(msgText));
         HBox message = new HBox(container);
 
@@ -181,7 +187,7 @@ public class MessengerController extends MainTabController {
         messengerFlow.getChildren().add(message);
     }
 
-    private void updateTransmitProgress(long sentBytes, long totalBytes, double remainingSeconds){
+    private void updateTransmitProgress(long sentBytes, long totalBytes, double remainingSeconds) {
         long percent = Math.round(progressBar.getProgress() * 100);
 
         String percentText = String.format("%d%% (%d bytes of %d)", percent, sentBytes, totalBytes);
@@ -198,13 +204,13 @@ public class MessengerController extends MainTabController {
             System.err.println("========= JSON ERROR IN TRANSMIT ==========");
             e.printStackTrace();
         }
-        double progress = sentBytes/((double)totalBytes);
+        double progress = sentBytes / ((double) totalBytes);
         progressBar.setProgress(progress);
         SocketManager.emit(SocketManager.EVENT_UPDATE_TRANSMIT_PROGRESS, progressJson);
     }
 
     @FXML
-    private void deleteAllMessages(){
+    private void deleteAllMessages() {
         messengerFlow.getChildren().clear();
     }
 }

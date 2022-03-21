@@ -1,16 +1,16 @@
-package transmitter.source.connection.receiver;
+package transmitter.connection.receiver;
 
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import transmitter.source.connection.data.Packet;
-import transmitter.source.connection.protocol.LaserProtocol;
-import transmitter.source.encode.Determiner;
-import transmitter.source.encode.Encoding;
-import transmitter.source.message.in.LightReadingMessage;
-import transmitter.source.util.Threading;
-import transmitter.source.util.logging.terminal.TerminalLoggable;
+import transmitter.connection.data.Packet;
+import transmitter.connection.protocol.LaserProtocol;
+import transmitter.encode.Determiner;
+import transmitter.encode.Encoding;
+import transmitter.message.in.LightReadingMessage;
+import transmitter.util.Threading;
+import transmitter.util.logging.terminal.TerminalLoggable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,8 @@ public class VirtualReceiver implements TerminalLoggable {
 
     private final ObservableList<Byte> binary = FXCollections.observableArrayList();
 
-    private final ObjectProperty<LightReadingMessage> lightReading = new SimpleObjectProperty<LightReadingMessage>(null);
+    private final ObjectProperty<LightReadingMessage> lightReading = new SimpleObjectProperty<LightReadingMessage>(
+            null);
     private final StringProperty bitBuffer = new SimpleStringProperty(null);
     private final BooleanProperty receiving = new SimpleBooleanProperty(false);
     private final BooleanProperty headerFound = new SimpleBooleanProperty(false);
@@ -38,10 +39,11 @@ public class VirtualReceiver implements TerminalLoggable {
     private final ObjectProperty<ReceiverState> state = new SimpleObjectProperty<>(ReceiverState.STANDBY);
     private final BooleanProperty lossFlag = new SimpleBooleanProperty(false);
 
-    public VirtualReceiver(LaserProtocol protocol){
+    public VirtualReceiver(LaserProtocol protocol) {
         this.protocol = protocol;
         determinerBinary.add((byte) Integer.parseUnsignedInt(Determiner.START_LINE_BINARY, 2));
-        ObservableList<Byte> determinerBytes = Encoding.encodeString(protocol.getPacketDeterminer().string, protocol.getTextEncodingCharset());
+        ObservableList<Byte> determinerBytes = Encoding.encodeString(protocol.getPacketDeterminer().string,
+                protocol.getTextEncodingCharset());
         determinerBinary.addAll(determinerBytes);
 
         System.out.println("============ determiner binary ============");
@@ -52,7 +54,7 @@ public class VirtualReceiver implements TerminalLoggable {
         initListeners();
     }
 
-    private void initListeners(){
+    private void initListeners() {
 
         lightReading.addListener((observable, oldValue, newValue) -> {
             onLightReadingChanged(oldValue, newValue);
@@ -62,14 +64,14 @@ public class VirtualReceiver implements TerminalLoggable {
 
     private long byteStartTime = 0;
 
-    private void onLightReadingChanged(LightReadingMessage prevReading, LightReadingMessage curReading){
+    private void onLightReadingChanged(LightReadingMessage prevReading, LightReadingMessage curReading) {
 
         if (curReading == null)
             return;
 
-        if (byteStartTime == 0){
+        if (byteStartTime == 0) {
 
-            if (detectSignal(curReading.getLight())){
+            if (detectSignal(curReading.getLight())) {
                 setState(ReceiverState.RECEIVING_NOHEADER);
                 // gonna check if the header is found after detecting the signal
                 long byteDelay = Byte.SIZE * getProtocol().getBitDelay();
@@ -78,16 +80,16 @@ public class VirtualReceiver implements TerminalLoggable {
                 Threading.SCHEDULED_POOL.schedule(() -> {
                     // when there's a noise or
                     // some kind of non-sense -> reset
-                    if ( ! isHeaderFound() && binary.size() > 0){
+                    if (!isHeaderFound() && binary.size() > 0) {
 
-                        logTerminal(Level.WARNING,"Found no header, resting..");
+                        logTerminal(Level.WARNING, "Found no header, resting..");
 
-                        if (getReceivedPackets().size() > 0){
+                        if (getReceivedPackets().size() > 0) {
                             // data loss occurred
-                                Platform.runLater(() -> {
-                                    setLossFlag(true);
-                                    setLossFlag(false);
-                                });
+                            Platform.runLater(() -> {
+                                setLossFlag(true);
+                                setLossFlag(false);
+                            });
                         }
 
                         reset();
@@ -96,40 +98,43 @@ public class VirtualReceiver implements TerminalLoggable {
 
                 byteStartTime = curReading.getTimestamp() - 1;
                 setBitBuffer("");
-                logTerminal(Level.INFO, String.format("Detected signal at: %d value: %d.", byteStartTime, curReading.getLight()));
+                logTerminal(Level.INFO,
+                        String.format("Detected signal at: %d value: %d.", byteStartTime, curReading.getLight()));
             }
         }
 
         if (byteStartTime != 0) {
             String buffer = getBitBuffer();
 
-            if (buffer.length() == Byte.SIZE){
+            if (buffer.length() == Byte.SIZE) {
 
                 String bitBuffer = getBitBuffer();
                 System.out.println(bitBuffer);
 
                 try {
                     binary.add((byte) Integer.parseUnsignedInt(getBitBuffer(), 2));
+                } catch (NumberFormatException ex) {
                 }
-                catch (NumberFormatException ex){}
 
                 byteStartTime += Byte.SIZE * getProtocol().getBitDelay();
                 setBitBuffer("");
 
-                if (bitBuffer.equals(Determiner.FINISH_LINE_BINARY) && checkFooter()){
+                if (bitBuffer.equals(Determiner.FINISH_LINE_BINARY) && checkFooter()) {
 
                     setState(ReceiverState.STANDBY);
                     List<Byte> packetBinary = new ArrayList<>(binary);
-                    packetBinary.remove(packetBinary.size() -1 ); // remove the finish line byte
+                    packetBinary.remove(packetBinary.size() - 1); // remove the finish line byte
 
                     int dataStartIndex = determinerBinary.size();
                     int dataEndIndex = binary.size() - determinerBinary.size() - 5;
 
-                    Packet packet = Packet.getReceiverInstance(Encoding.toByteArray(packetBinary), dataStartIndex, dataEndIndex);
+                    Packet packet = Packet.getReceiverInstance(Encoding.toByteArray(packetBinary), dataStartIndex,
+                            dataEndIndex);
                     receivedPackets.add(packet);
 
-                    logTerminal(Level.FINEST, String.format("===[Virtual Receiver] received packet [%d from %d].%n", packet.index() + 1, (packet.frameSize())));
-                    if (packet.index() == packet.frameSize() -1){
+                    logTerminal(Level.FINEST, String.format("===[Virtual Receiver] received packet [%d from %d].%n",
+                            packet.index() + 1, (packet.frameSize())));
+                    if (packet.index() == packet.frameSize() - 1) {
                         for (ReceiverListener listener : listeners) {
                             Platform.runLater(() -> {
                                 listener.listen(new ArrayList<>(receivedPackets));
@@ -141,18 +146,17 @@ public class VirtualReceiver implements TerminalLoggable {
                     reset();
                 }
 
-                if (! isHeaderFound()){
+                if (!isHeaderFound()) {
                     int binaryStringsSize = binary.size();
                     int determinerSize = determinerBinary.size();
 
-                    if (binaryStringsSize == determinerSize){
+                    if (binaryStringsSize == determinerSize) {
                         boolean isDeterminer = isPacketDeterminer(binary);
                         setState(ReceiverState.RECEIVING);
                         setHeaderFound(isDeterminer);
 
                         logTerminal(Level.INFO, "Header found? " + isHeaderFound());
-                    }
-                    else if (binaryStringsSize > determinerSize){
+                    } else if (binaryStringsSize > determinerSize) {
                         byteStartTime = 0;
                         binary.clear();
                     }
@@ -166,7 +170,7 @@ public class VirtualReceiver implements TerminalLoggable {
     private int bitOrder = 1;
     private ObservableList<LightReadingMessage> bitReadings = FXCollections.observableArrayList();
 
-    private void updateBinaryBuffer(LightReadingMessage previousReading){
+    private void updateBinaryBuffer(LightReadingMessage previousReading) {
         // this method is in a loop-like invocation
 
         int bufferLength = getBitBuffer().length();
@@ -176,7 +180,7 @@ public class VirtualReceiver implements TerminalLoggable {
         long currentTimestamp = currentReading.getTimestamp();
 
         if (currentTimestamp >= currentBitStartTime &&
-            currentTimestamp <= currentBitStartTime + getProtocol().getBitDelay()){
+                currentTimestamp <= currentBitStartTime + getProtocol().getBitDelay()) {
 
             if (previousReading != null &&
                     currentTimestamp == previousReading.getTimestamp())
@@ -185,14 +189,13 @@ public class VirtualReceiver implements TerminalLoggable {
             bitReadings.add(currentReading);
         }
 
-        else if (currentTimestamp > currentBitStartTime){
+        else if (currentTimestamp > currentBitStartTime) {
 
             boolean currentState = false;
 
             try {
                 currentState = isHighBit(bitReadings);
-            }
-            catch (IllegalArgumentException ex){
+            } catch (IllegalArgumentException ex) {
                 if (isHeaderFound())
                     throw ex;
                 else
@@ -208,32 +211,31 @@ public class VirtualReceiver implements TerminalLoggable {
 
     private boolean previousBitState = true;
 
-    private boolean isHighBit(final List<LightReadingMessage> bitReadings){
+    private boolean isHighBit(final List<LightReadingMessage> bitReadings) {
 
         int byteCorrection = protocol.getByteCorrection();
 
-        if (bitReadings.size() < 2){
-            throw new IllegalArgumentException("Too few bit light readings, got "+ bitReadings.size() + " expected at least " + 2);
+        if (bitReadings.size() < 2) {
+            throw new IllegalArgumentException(
+                    "Too few bit light readings, got " + bitReadings.size() + " expected at least " + 2);
         }
 
         // cannot modify passed-by-reference list
         int startIndex = byteCorrection;
         if (byteCorrection > 0)
-            startIndex = byteCorrection -1;
+            startIndex = byteCorrection - 1;
 
         int endIndex = bitReadings.size() - byteCorrection;
 
         List<LightReadingMessage> reliableReadings = bitReadings.subList(startIndex, endIndex);
 
         int startLight = reliableReadings.get(0).getLight();
-        int endLight = reliableReadings.get(reliableReadings.size() -1).getLight();
+        int endLight = reliableReadings.get(reliableReadings.size() - 1).getLight();
 
-
-        //  increase 6
-        //  decrease 20
+        // increase 6
+        // decrease 20
         int reasonableIncrease = 20;
         int reasonableDecrease = 6;
-
 
         boolean increase = (endLight - startLight) > 0;
         boolean decrease = (endLight - startLight) < 0;
@@ -241,24 +243,21 @@ public class VirtualReceiver implements TerminalLoggable {
 
         boolean state;
 
-        if (increase){
+        if (increase) {
 
             if (endLight >= protocol.getHighLightValue()) {
                 state = true;
-            }
-            else{
+            } else {
                 state = previousBitState;
             }
-        }
-        else if (decrease){
+        } else if (decrease) {
             if (absDiff >= reasonableDecrease)
                 state = false;
 
-            else {  // slight decrease
+            else { // slight decrease
                 state = (endLight >= protocol.getHighLightValue());
             }
-        }
-        else{   // in case start == end
+        } else { // in case start == end
             state = (endLight >= protocol.getHighLightValue());
         }
 
@@ -266,7 +265,8 @@ public class VirtualReceiver implements TerminalLoggable {
 
         if (PRINT_BIT_READING_DETAILS) {
             if (bitReadings.size() >= 1) {
-                String formattedBitDetails = String.format("[%02d]current: %03d - %03d (%03d) [%b] \t finished at: %07d%n",
+                String formattedBitDetails = String.format(
+                        "[%02d]current: %03d - %03d (%03d) [%b] \t finished at: %07d%n",
                         bitOrder,
                         startLight,
                         endLight,
@@ -281,24 +281,25 @@ public class VirtualReceiver implements TerminalLoggable {
         return state;
     }
 
-    private void appendBitToBuffer(boolean state){
-        char append =  state? '1': '0';
+    private void appendBitToBuffer(boolean state) {
+        char append = state ? '1' : '0';
         setBitBuffer(getBitBuffer() + append);
         bitOrder++;
     }
 
     private int lowestLightDetected = 0;
-    private boolean detectSignal(int light){
+
+    private boolean detectSignal(int light) {
 
         if (light >= protocol.getHighLightValue() - 90
-                && (light - lowestLightDetected) >= 11 )
+                && (light - lowestLightDetected) >= 11)
             return true;
 
         lowestLightDetected = light;
         return false;
     }
 
-    private boolean checkFooter(){
+    private boolean checkFooter() {
 
         int bytesSize = binary.size();
         int determinerSize = determinerBinary.size();
@@ -308,7 +309,7 @@ public class VirtualReceiver implements TerminalLoggable {
         if (bytesSize < (determinerSize * 2))
             return false;
 
-        if (bytesSize >= (determinerSize * 2)){
+        if (bytesSize >= (determinerSize * 2)) {
 
             int footerStartIndex = (bytesSize - (determinerSize + 1));
             int footerEndIndex = bytesSize - 1; // 1 for the finish line
@@ -320,11 +321,11 @@ public class VirtualReceiver implements TerminalLoggable {
         return false;
     }
 
-    private boolean isPacketDeterminer(final List<Byte> binaryStrings){
+    private boolean isPacketDeterminer(final List<Byte> binaryStrings) {
         return binaryStrings.equals(determinerBinary);
     }
 
-    public void reset(){
+    public void reset() {
 
         setState(ReceiverState.STANDBY);
         setBitBuffer("");
@@ -341,11 +342,12 @@ public class VirtualReceiver implements TerminalLoggable {
 
     }
 
-
-    /* ******************************************** *
-     *          setters & getters                   *
+    /*
+     * ******************************************** *
+     * setters & getters *
      *
-     * ******************************************** */
+     * ********************************************
+     */
 
     public boolean isReceiving() {
         return receiving.get();
@@ -395,20 +397,19 @@ public class VirtualReceiver implements TerminalLoggable {
         return protocol;
     }
 
-    public ObservableList<Packet> getReceivedPackets(){
+    public ObservableList<Packet> getReceivedPackets() {
         return this.receivedPackets;
     }
 
-
-    public ObservableList<ReceiverListener> getListeners(){
+    public ObservableList<ReceiverListener> getListeners() {
         return this.listeners;
     }
 
-    public void addListener(ReceiverListener listener){
+    public void addListener(ReceiverListener listener) {
         this.listeners.add(listener);
     }
 
-    public void removeListener(ReceiverListener listener){
+    public void removeListener(ReceiverListener listener) {
         this.listeners.remove(listener);
     }
 

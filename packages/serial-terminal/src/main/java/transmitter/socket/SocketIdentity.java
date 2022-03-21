@@ -1,4 +1,4 @@
-package transmitter.source.socket;
+package transmitter.socket;
 
 public enum SocketIdentity {
 
@@ -6,6 +6,7 @@ public enum SocketIdentity {
     BETA("Beta");
 
     public final String displayString;
+
     SocketIdentity(String displayString) {
         this.displayString = displayString;
     }

@@ -10,12 +10,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="transmitter.source.ui.developer.LightTimeChart">
+<VBox prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="transmitter.ui.developer.LightTimeChart">
    <children>
       <ScrollPane fx:id="chartScroll" fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
          <content>
             <StackPane fx:id="chartStack" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
-         </content></ScrollPane>
+         </content>
+      </ScrollPane>
       <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="10.0">
          <children>
             <Label text="Byte duration (ms)" />

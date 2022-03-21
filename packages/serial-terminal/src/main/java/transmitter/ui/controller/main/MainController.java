@@ -1,4 +1,4 @@
-package transmitter.source.ui.controller.main;
+package transmitter.ui.controller.main;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListCell;
@@ -18,23 +18,23 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.WindowEvent;
-import transmitter.source.socket.SocketManager;
-import transmitter.source.ui.controls.alert.AlertAction;
-import transmitter.source.ui.controls.alert.InfoAlert;
-import transmitter.source.ui.controls.alert.InfoAlertType;
-import transmitter.source.connection.BAO;
-import transmitter.source.connection.protocol.LaserProtocol;
-import transmitter.source.connection.receiver.VirtualReceiver;
-import transmitter.source.connection.serial.listener.InMessageListener;
-import transmitter.source.connection.serial.listener.InMessageListenerType;
-import transmitter.source.message.in.LightReadingMessage;
-import transmitter.source.setting.SettingKey;
-import transmitter.source.setting.Settings;
-import transmitter.source.ui.Alerts;
-import transmitter.source.ui.controller.ConnectionAlert;
-import transmitter.source.ui.controller.main.tab.MainTab;
-import transmitter.source.util.Threading;
-import transmitter.source.util.Windows;
+import transmitter.socket.SocketManager;
+import transmitter.ui.controls.alert.AlertAction;
+import transmitter.ui.controls.alert.InfoAlert;
+import transmitter.ui.controls.alert.InfoAlertType;
+import transmitter.connection.BAO;
+import transmitter.connection.protocol.LaserProtocol;
+import transmitter.connection.receiver.VirtualReceiver;
+import transmitter.connection.serial.listener.InMessageListener;
+import transmitter.connection.serial.listener.InMessageListenerType;
+import transmitter.message.in.LightReadingMessage;
+import transmitter.setting.SettingKey;
+import transmitter.setting.Settings;
+import transmitter.ui.Alerts;
+import transmitter.ui.controller.ConnectionAlert;
+import transmitter.ui.controller.main.tab.MainTab;
+import transmitter.util.Threading;
+import transmitter.util.Windows;
 
 import java.awt.*;
 import java.io.IOException;
@@ -74,7 +74,7 @@ public class MainController {
 
     private final InMessageListener<LightReadingMessage> lightListener = message -> {
         getVirtualReceiver().setLightReading(message);
-//        System.out.println(message.getRawMessage());
+        // System.out.println(message.getRawMessage());
     };
 
     @FXML
@@ -141,7 +141,8 @@ public class MainController {
 
             task.runningProperty().addListener((observable, oldValue, newValue) -> {
                 if (!newValue) {
-                    Threading.SCHEDULED_POOL.schedule(() -> receiverToggle.setDisable(false), 1500, TimeUnit.MILLISECONDS);
+                    Threading.SCHEDULED_POOL.schedule(() -> receiverToggle.setDisable(false), 1500,
+                            TimeUnit.MILLISECONDS);
                 }
             });
 
@@ -169,7 +170,8 @@ public class MainController {
             if (protocolChanged) {
 
                 if (!isStandby()) {
-                    String bodyText = "Changed settings will take effect in the next receiving or transmitting process." +
+                    String bodyText = "Changed settings will take effect in the next receiving or transmitting process."
+                            +
                             "\nYou have to restart the receiver manually.";
                     Alerts.warningAlert(Windows.MAIN_WINDOW,
                             "Communication Settings Changed",
@@ -189,7 +191,8 @@ public class MainController {
                                 AlertAction.OK);
                     } else {
                         Task<Boolean> bitDelayTask = BAO.setupBoard();
-                        bitDelayTask.runningProperty().addListener(observable -> updateBackgroundProcessView(bitDelayTask.isRunning()));
+                        bitDelayTask.runningProperty()
+                                .addListener(observable -> updateBackgroundProcessView(bitDelayTask.isRunning()));
                         bitDelayTask.setOnFailed(event -> {
                             Alerts.errorAlert(Windows.MAIN_WINDOW,
                                     "Couldn't Re-configure Board",
@@ -208,10 +211,13 @@ public class MainController {
 
         settingsButton.setOnAction(event -> Windows.SETTINGS_WINDOW.show());
 
-        // FIXME: currently this event handler gets registered many times, because it's connected to the
-        //  final instance of LoadableState in the `Windows` class and its listeners don't get destroyed
-        //  when the window is closed because (the window itself is not destroyed only the scene)
-        //  Dec 22nd 2019.
+        // FIXME: currently this event handler gets registered many times, because it's
+        // connected to the
+        // final instance of LoadableState in the `Windows` class and its listeners
+        // don't get destroyed
+        // when the window is closed because (the window itself is not destroyed only
+        // the scene)
+        // Dec 22nd 2019.
         Windows.MAIN_WINDOW.addEventHandler(WindowEvent.WINDOW_HIDING, closeEvent -> disconnect());
 
         // ==== socket status binding ====== //
@@ -263,22 +269,27 @@ public class MainController {
                         warningAlert.setHeadingText("Possible Data Lost");
 
                         int lostIndex = getVirtualReceiver().getReceivedPackets().size();
-                        warningAlert.setBodyText("Some data might have been lost while receiving. The receiving process will continue but no grants for what the data will look like!\n\nLost packet index: " + lostIndex);
+                        warningAlert.setBodyText(
+                                "Some data might have been lost while receiving. The receiving process will continue but no grants for what the data will look like!\n\nLost packet index: "
+                                        + lostIndex);
                         warningAlert.show();
                         Toolkit.getDefaultToolkit().beep();
                     }
                 }
             });
 
-            Threading.FIXED_POOL.submit(() -> BAO.serial().addInMessageListener(InMessageListenerType.LIGHT_READ, lightListener));
+            Threading.FIXED_POOL
+                    .submit(() -> BAO.serial().addInMessageListener(InMessageListenerType.LIGHT_READ, lightListener));
         }
         System.gc();
     }
 
-    /* ****************************************** *
-     *                                            *
-     *                  UTILS                     *
-     * ****************************************** */
+    /*
+     * ****************************************** *
+     * *
+     * UTILS *
+     * ******************************************
+     */
 
     private void disconnect() {
 
@@ -352,7 +363,6 @@ public class MainController {
     public boolean isStandby() {
         return getState() == CommState.STANDBY;
     }
-
 
     // ********* setters && getters ********* //
 

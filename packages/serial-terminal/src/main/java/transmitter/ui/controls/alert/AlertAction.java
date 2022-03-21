@@ -1,10 +1,9 @@
-package transmitter.source.ui.controls.alert;
+package transmitter.ui.controls.alert;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.scene.Node;
 
-import static transmitter.source.util.Utils.getI18nString;
-
+import static transmitter.util.Utils.getI18nString;
 
 public class AlertAction {
 
@@ -24,16 +23,14 @@ public class AlertAction {
     private final String text;
     private final Node graphic;
 
-    public AlertAction(String text){
+    public AlertAction(String text) {
         this(text, null);
     }
 
-
-    public AlertAction(String text, Node graphic){
+    public AlertAction(String text, Node graphic) {
         this.text = text;
         this.graphic = graphic;
     }
-
 
     public String getText() {
         return text;
@@ -43,7 +40,7 @@ public class AlertAction {
         return graphic;
     }
 
-    JFXButton constructButton(){
+    JFXButton constructButton() {
         JFXButton button = new JFXButton();
         button.getStyleClass().add("alert-action-button");
         button.setText(this.getText());

@@ -1,4 +1,4 @@
-package transmitter.source.ui.controls.alert;
+package transmitter.ui.controls.alert;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
@@ -8,31 +8,39 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import transmitter.source.util.Res;
-import transmitter.source.util.Utils;
+import transmitter.util.Res;
+import transmitter.util.Utils;
 
 import java.io.IOException;
 
 public class AlertLayout extends VBox {
 
-    @FXML protected HBox headingPane;
-    @FXML protected Label headingLabel;
-    @FXML protected FontAwesomeIconView graphicView;
+    @FXML
+    protected HBox headingPane;
+    @FXML
+    protected Label headingLabel;
+    @FXML
+    protected FontAwesomeIconView graphicView;
 
-    @FXML protected StackPane bodyPane;
-    @FXML protected Label bodyLabel;
+    @FXML
+    protected StackPane bodyPane;
+    @FXML
+    protected Label bodyLabel;
 
-    @FXML protected VBox footerPane;
-    @FXML protected HBox buttonsBar;
-    @FXML protected FlowPane actionsFlow;
+    @FXML
+    protected VBox footerPane;
+    @FXML
+    protected HBox buttonsBar;
+    @FXML
+    protected FlowPane actionsFlow;
 
-    public AlertLayout(){
+    public AlertLayout() {
         super();
         createSceneGraph();
 
     }
 
-    private void createSceneGraph(){
+    private void createSceneGraph() {
         FXMLLoader fxmlLoader = new FXMLLoader(Res.Fxml.CUSTOM_ALERT_LAYOUT.getUrl(), Utils.getBundle());
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -44,7 +52,7 @@ public class AlertLayout extends VBox {
     }
 
     @FXML
-    protected void initialize(){
+    protected void initialize() {
 
     }
 

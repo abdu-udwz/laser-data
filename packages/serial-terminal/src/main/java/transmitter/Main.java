@@ -1,4 +1,4 @@
-package transmitter.source;
+package transmitter;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -7,15 +7,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import transmitter.source.connection.data.Packet;
-import transmitter.source.connection.data.Packets;
-import transmitter.source.connection.protocol.LaserProtocol;
-import transmitter.source.connection.receiver.VirtualReceiver;
-import transmitter.source.message.in.LightReadingMessage;
-import transmitter.source.socket.SocketManager;
-import transmitter.source.ui.controller.ConnectionAlert;
-import transmitter.source.util.Res;
-import transmitter.source.util.Threading;
+import transmitter.connection.data.Packet;
+import transmitter.connection.data.Packets;
+import transmitter.connection.protocol.LaserProtocol;
+import transmitter.connection.receiver.VirtualReceiver;
+import transmitter.message.in.LightReadingMessage;
+import transmitter.socket.SocketManager;
+import transmitter.ui.controller.ConnectionAlert;
+import transmitter.util.Res;
+import transmitter.util.Threading;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -35,18 +35,18 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage){
+    public void start(Stage primaryStage) {
         new ConnectionAlert().showAndWait();
-//        testVirtualReceiver();
-//        clearReadDuplicates();
-//        transmitPackets();
+        // testVirtualReceiver();
+        // clearReadDuplicates();
+        // transmitPackets();
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         launch(args);
     }
 
-    private static void testVirtualReceiver(){
+    private static void testVirtualReceiver() {
         new Thread(() -> {
             ObservableList<String> sample = FXCollections.observableArrayList();
 
@@ -65,7 +65,7 @@ public class Main extends Application {
         }).start();
     }
 
-    private static void clearReadDuplicates(){
+    private static void clearReadDuplicates() {
         new Thread(() -> {
 
             ObservableList<String> sample = FXCollections.observableArrayList();
@@ -99,7 +99,7 @@ public class Main extends Application {
         }).start();
     }
 
-    private static void transmitPackets(){
+    private static void transmitPackets() {
 
         String text = "الحمد لله رب العالمين الرحمن الرحيم ملك يوم الدين إياك نعبد وإياك نستعين ا";
 
@@ -120,13 +120,14 @@ public class Main extends Application {
         List<Packet> receiverPackets = new ArrayList<>();
 
         for (Packet packet : packets) {
-            Packet receiverInstance = Packet.getReceiverInstance(packet.getBytes(), packet.dataStartIndex, packet.dataEndIndex);
+            Packet receiverInstance = Packet.getReceiverInstance(packet.getBytes(), packet.dataStartIndex,
+                    packet.dataEndIndex);
             receiverPackets.add(receiverInstance);
         }
         System.out.println(Packets.toText(receiverPackets, charset));
     }
 
-    private static void showLightTimeChart(){
+    private static void showLightTimeChart() {
 
         Stage chartStage = new Stage();
         VBox root = null;

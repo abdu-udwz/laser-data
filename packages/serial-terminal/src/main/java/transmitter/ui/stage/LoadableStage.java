@@ -1,4 +1,4 @@
-package transmitter.source.ui.stage;
+package transmitter.ui.stage;
 
 import com.sun.istack.internal.Nullable;
 import javafx.fxml.FXMLLoader;

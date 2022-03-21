@@ -1,4 +1,4 @@
-package transmitter.source.encode;
+package transmitter.encode;
 
 public enum Determiner {
 

@@ -1,4 +1,4 @@
-package transmitter.source.util.logging.terminal;
+package transmitter.util.logging.terminal;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.text.Text;
@@ -32,39 +32,38 @@ public class TerminalFormatter extends Formatter {
 
     private SimpleBooleanProperty useTimestamp = new SimpleBooleanProperty(this, "useTimestamp");
 
-//    private final List<Text> prompt = preparePrompt();
+    // private final List<Text> prompt = preparePrompt();
 
-    public TerminalFormatter(){
+    public TerminalFormatter() {
         this(false);
     }
 
-    public TerminalFormatter(boolean useTimestamp){
+    public TerminalFormatter(boolean useTimestamp) {
         this.useTimestamp.set(useTimestamp);
     }
 
     @Override
     public String format(LogRecord record) {
         // the format is:
-        //  ++ timestamp enabled:
-        //      [timestamp] head: prompt1 prompt2 message
-        //      e.g. [2019-10-20] Receiver:~$ Got packet from... etc
+        // ++ timestamp enabled:
+        // [timestamp] head: prompt1 prompt2 message
+        // e.g. [2019-10-20] Receiver:~$ Got packet from... etc
 
         // ++ timestamp not enabled:
-        //      head: prompt1 prompt2 message
-        //      e.g. Receiver:~$ Got packet from... etc
+        // head: prompt1 prompt2 message
+        // e.g. Receiver:~$ Got packet from... etc
 
         Object[] parameters = record.getParameters();
         String headString = (String) parameters[0];
 
-        if (useTimestamp.get()){
+        if (useTimestamp.get()) {
             return String.format("[%s] %s:%s%s %s",
                     prepareTimestamp(record.getMillis()),
                     headString,
                     PROMPT_PART_1,
                     PROMPT_PART_2,
                     record.getMessage());
-        }
-        else{
+        } else {
             return String.format("%s:%s%s %s",
                     headString,
                     PROMPT_PART_1,
@@ -73,14 +72,13 @@ public class TerminalFormatter extends Formatter {
         }
     }
 
-    public List<Text> formatTerminal(LogRecord record){
+    public List<Text> formatTerminal(LogRecord record) {
 
         List<Text> formattedRecord = new ArrayList<>();
 
-
         Text timestampText = null;
 
-        if (useTimestamp.get()){
+        if (useTimestamp.get()) {
 
             String timestampString = prepareTimestamp(record.getMillis());
 
@@ -89,14 +87,14 @@ public class TerminalFormatter extends Formatter {
         }
 
         // the parameters of the log record:
-        //  0: the string shown before the prompt
+        // 0: the string shown before the prompt
 
         String headString = "Unknown";
         try {
             Object[] parameters = record.getParameters();
             headString = (String) parameters[0];
 
-        }catch (IndexOutOfBoundsException ignored){
+        } catch (IndexOutOfBoundsException ignored) {
         }
 
         Text headText = new Text(headString);
@@ -116,7 +114,7 @@ public class TerminalFormatter extends Formatter {
         return formattedRecord;
     }
 
-    private List<Text> preparePrompt(){
+    private List<Text> preparePrompt() {
         Text colon = new Text(":");
         Text part1 = new Text(PROMPT_PART_1);
 
@@ -129,13 +127,13 @@ public class TerminalFormatter extends Formatter {
         return Arrays.asList(colon, part1, part2);
     }
 
-    private String prepareTimestamp(long millis){
+    private String prepareTimestamp(long millis) {
         Instant instant = Instant.ofEpochMilli(millis);
         LocalDateTime date = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
         return DateTimeFormatter.ofPattern("uuuu-MM-dd").format(date);
     }
 
-    private String getStyleclassForLevel(Level level){
+    private String getStyleclassForLevel(Level level) {
 
         if (level.equals(Level.INFO) || level.equals(Level.CONFIG))
             return STYLE_CLASS_NORMAL;

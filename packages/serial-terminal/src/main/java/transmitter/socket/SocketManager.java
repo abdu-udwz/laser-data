@@ -1,4 +1,4 @@
-package transmitter.source.socket;
+package transmitter.socket;
 
 import io.socket.client.Ack;
 import io.socket.client.IO;
@@ -10,7 +10,7 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import transmitter.source.util.logging.Logging;
+import transmitter.util.logging.Logging;
 
 import java.net.URISyntaxException;
 import java.util.concurrent.Callable;
@@ -58,8 +58,8 @@ public abstract class SocketManager {
         socket.emit(event, args);
     }
 
-    public static void addEventListener(String event, Emitter.Listener listener){
-        if (socket == null){
+    public static void addEventListener(String event, Emitter.Listener listener) {
+        if (socket == null) {
             throw new IllegalStateException("Socket is not initialized. Cannot register event listener");
         }
         socket.on(event, listener);
@@ -69,12 +69,12 @@ public abstract class SocketManager {
         Logging.logTerminal("Socket", level, message);
     }
 
-    public static void setOnDisconnected(Runnable listener){
+    public static void setOnDisconnected(Runnable listener) {
         socket.on(Socket.EVENT_DISCONNECT, args -> listener.run());
     }
 
     // ==================================================== //
-    //                  setters && getters                  //
+    // setters && getters //
     // ==================================================== //
     public static boolean isConnected() {
         return connected.get();

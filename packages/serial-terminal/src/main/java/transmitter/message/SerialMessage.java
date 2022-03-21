@@ -1,4 +1,4 @@
-package transmitter.source.message;
+package transmitter.message;
 
 public abstract class SerialMessage {
 
@@ -7,7 +7,7 @@ public abstract class SerialMessage {
 
     private final String message;
 
-    public SerialMessage(String message){
+    public SerialMessage(String message) {
         this.message = message;
     }
 

@@ -1,4 +1,4 @@
-package transmitter.source.util.logging.terminal;
+package transmitter.util.logging.terminal;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,15 +10,15 @@ public class TerminalLogRecord {
 
     private final ObservableList<Text> items = FXCollections.observableArrayList();
 
-    public TerminalLogRecord(Text... items){
+    public TerminalLogRecord(Text... items) {
         getItems().addAll(items);
     }
 
-    public TerminalLogRecord(List<Text> items){
+    public TerminalLogRecord(List<Text> items) {
         getItems().addAll(items);
     }
 
-    public ObservableList<Text> getItems(){
+    public ObservableList<Text> getItems() {
         return this.items;
     }
 

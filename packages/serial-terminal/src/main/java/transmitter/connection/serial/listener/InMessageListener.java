@@ -1,6 +1,6 @@
-package transmitter.source.connection.serial.listener;
+package transmitter.connection.serial.listener;
 
-import transmitter.source.message.in.InMessage;
+import transmitter.message.in.InMessage;
 
 @FunctionalInterface
 public interface InMessageListener<T extends InMessage> {

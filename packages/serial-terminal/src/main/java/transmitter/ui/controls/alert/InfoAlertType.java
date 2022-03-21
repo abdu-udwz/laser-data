@@ -1,5 +1,4 @@
-package transmitter.source.ui.controls.alert;
-
+package transmitter.ui.controls.alert;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.scene.paint.Color;
@@ -22,7 +21,5 @@ public enum InfoAlertType {
         this.graphic = graphic;
         this.glyphSize = glyphSize;
     }
-
-
 
 }

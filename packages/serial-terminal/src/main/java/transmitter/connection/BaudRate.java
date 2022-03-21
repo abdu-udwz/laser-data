@@ -1,7 +1,7 @@
-package transmitter.source.connection;
+package transmitter.connection;
 
 public enum BaudRate {
-    
+
     R_110(110),
     R_300(300),
     R_600(600),

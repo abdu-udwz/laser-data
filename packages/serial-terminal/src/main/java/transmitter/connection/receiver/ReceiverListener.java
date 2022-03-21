@@ -1,6 +1,6 @@
-package transmitter.source.connection.receiver;
+package transmitter.connection.receiver;
 
-import transmitter.source.connection.data.Packet;
+import transmitter.connection.data.Packet;
 
 import java.util.List;
 

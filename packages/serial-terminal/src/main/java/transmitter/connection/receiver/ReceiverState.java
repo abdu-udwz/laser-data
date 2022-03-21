@@ -1,4 +1,4 @@
-package transmitter.source.connection.receiver;
+package transmitter.connection.receiver;
 
 public enum ReceiverState {
     RECEIVING_NOHEADER,

@@ -1,4 +1,4 @@
-package transmitter.source.encode;
+package transmitter.encode;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,18 +10,17 @@ import java.util.List;
 
 public class Encoding {
 
-
-    public static ObservableList<Byte> encodeString(final String string, Charset charset){
+    public static ObservableList<Byte> encodeString(final String string, Charset charset) {
         return toByteList(string.getBytes(charset));
     }
 
-    public static ObservableList<Byte> encodeShort(final Short num){
+    public static ObservableList<Byte> encodeShort(final Short num) {
         ByteBuffer buffer = ByteBuffer.allocate(2);
         buffer.putShort(num);
         return toByteList(buffer.array());
     }
 
-    public static ObservableList<String> toBinaryStrings(List<Byte> byteList){
+    public static ObservableList<String> toBinaryStrings(List<Byte> byteList) {
         return toBinaryStrings(toByteArray(byteList));
     }
 
@@ -51,7 +50,7 @@ public class Encoding {
         return binaryStrings;
     }
 
-    public static List<Byte> listFromBinaryStrings(List<String> binaryStrings){
+    public static List<Byte> listFromBinaryStrings(List<String> binaryStrings) {
         ArrayList<Byte> bytes = new ArrayList<>();
 
         for (String binaryString : binaryStrings) {
@@ -72,7 +71,7 @@ public class Encoding {
         return array;
     }
 
-    public static ObservableList<Byte> toByteList(byte[] array){
+    public static ObservableList<Byte> toByteList(byte[] array) {
         ObservableList<Byte> list = FXCollections.observableArrayList();
         for (byte b : array) {
             list.add(b);
@@ -84,7 +83,7 @@ public class Encoding {
         return new String(toByteArray(bytes), charset);
     }
 
-    public static Short decodeShort(byte[] array){
+    public static Short decodeShort(byte[] array) {
         ByteBuffer buffer = ByteBuffer.wrap(array);
         return buffer.getShort();
     }

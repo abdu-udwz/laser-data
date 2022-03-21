@@ -1,4 +1,4 @@
-package transmitter.source.ui.controls.alert;
+package transmitter.ui.controls.alert;
 
 import com.jfoenix.controls.JFXButton;
 import com.sun.istack.internal.Nullable;
@@ -10,14 +10,14 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import transmitter.source.util.Res;
-import transmitter.source.util.Utils;
+import transmitter.util.Res;
+import transmitter.util.Utils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public class InfoAlert extends CustomAlert{
+public class InfoAlert extends CustomAlert {
 
     private final ObjectProperty<InfoAlertType> alertType = new SimpleObjectProperty<>();
 
@@ -28,7 +28,7 @@ public class InfoAlert extends CustomAlert{
     // InfoAlertLayout but AlertLayout and this doesn't contain details stuff..
     private final InfoAlertLayout myCustomLayout = new InfoAlertLayout();
 
-    private class InfoAlertLayout extends AlertLayout{
+    private class InfoAlertLayout extends AlertLayout {
 
         private JFXButton detailsButton = new JFXButton(Utils.getI18nString("ALERT_SHOW_DETAILS"));
 
@@ -36,7 +36,7 @@ public class InfoAlert extends CustomAlert{
         private TextArea detailsArea;
         private JFXButton copyDetailsButton;
 
-        private InfoAlertLayout(){
+        private InfoAlertLayout() {
             super();
             initComponents();
 
@@ -45,7 +45,7 @@ public class InfoAlert extends CustomAlert{
             this.getStyleClass().add("info-alert-layout");
         }
 
-        private void initComponents(){
+        private void initComponents() {
 
             try {
                 this.detailsPane = FXMLLoader.load(Res.Fxml.INFO_ALERT_DETAILS_LAYOUT.getUrl(), Utils.getBundle());
@@ -71,15 +71,15 @@ public class InfoAlert extends CustomAlert{
         }
     }
 
-    public InfoAlert(){
+    public InfoAlert() {
         this(InfoAlertType.NONE, (AlertAction) null);
     }
 
-    public InfoAlert(InfoAlertType infoAlertType, AlertAction... actions){
+    public InfoAlert(InfoAlertType infoAlertType, AlertAction... actions) {
         this(null, infoAlertType, actions);
     }
 
-    public InfoAlert(@Nullable Stage stage, InfoAlertType infoAlertType, AlertAction... actions){
+    public InfoAlert(@Nullable Stage stage, InfoAlertType infoAlertType, AlertAction... actions) {
         super(stage);
 
         setLayout(myCustomLayout);
@@ -93,7 +93,7 @@ public class InfoAlert extends CustomAlert{
         getDialogPane().getStylesheets().add(Res.Stylesheet.TEMPLATES.getUrl());
     }
 
-    private void initListeners(){
+    private void initListeners() {
 
         alertTypeProperty().addListener((observable, oldValue, newValue) -> {
             myCustomLayout.graphicView.setIcon(newValue.graphic);
@@ -104,7 +104,7 @@ public class InfoAlert extends CustomAlert{
         useDetailsProperty().addListener((observable, oldValue, newValue) -> onUseDetailsChanged());
 
         myCustomLayout.detailsButton.setOnAction(event -> {
-            setShowingDetails(! isShowingDetails());
+            setShowingDetails(!isShowingDetails());
         });
 
         myCustomLayout.copyDetailsButton.setOnAction(event -> {
@@ -125,14 +125,14 @@ public class InfoAlert extends CustomAlert{
         });
     }
 
-    private void onUseDetailsChanged(){
+    private void onUseDetailsChanged() {
         myCustomLayout.detailsPane.setVisible(isUseDetails());
         myCustomLayout.detailsPane.setManaged(isUseDetails());
         myCustomLayout.detailsButton.setVisible(isUseDetails());
         myCustomLayout.detailsButton.setManaged(isUseDetails());
     }
 
-    public void visualizeStackTrace(Throwable throwable){
+    public void visualizeStackTrace(Throwable throwable) {
 
         StringWriter stackTraceWriter = new StringWriter();
         throwable.printStackTrace(new PrintWriter(stackTraceWriter));
@@ -141,46 +141,45 @@ public class InfoAlert extends CustomAlert{
         setDetailsText(detailsText);
     }
 
-    public void setDetailsText(String text){
-        if (! isUseDetails())
+    public void setDetailsText(String text) {
+        if (!isUseDetails())
             throw new IllegalStateException("InfoAlert is not set to use details");
         this.myCustomLayout.detailsArea.setText(text);
     }
 
-    public String getDetailsText(){
-        if (! isUseDetails())
+    public String getDetailsText() {
+        if (!isUseDetails())
             throw new IllegalStateException("InfoAlert is not set to use details");
 
         return this.myCustomLayout.detailsArea.getText();
     }
 
-    public StringProperty detailsTextProperty(){
-        if (! isUseDetails())
+    public StringProperty detailsTextProperty() {
+        if (!isUseDetails())
             throw new IllegalStateException("InfoAlert is not set to use details");
 
         return this.myCustomLayout.detailsArea.textProperty();
     }
 
     public boolean isShowingDetails() {
-        if (! isUseDetails())
+        if (!isUseDetails())
             throw new IllegalStateException("InfoAlert is not set to use details");
 
         return showingDetails.get();
     }
 
     public BooleanProperty showingDetailsProperty() {
-        if (! isUseDetails())
+        if (!isUseDetails())
             throw new IllegalStateException("InfoAlert is not set to use details");
         return showingDetails;
     }
 
     public void setShowingDetails(boolean showingDetails) {
-        if (! isUseDetails())
+        if (!isUseDetails())
             throw new IllegalStateException("InfoAlert is not set to use details");
 
         this.showingDetails.set(showingDetails);
     }
-
 
     public boolean isUseDetails() {
         return useDetails.get();

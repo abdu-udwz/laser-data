@@ -1,4 +1,4 @@
-package transmitter.source.ui.controls.alert;
+package transmitter.ui.controls.alert;
 
 import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.JFXProgressBar;
@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 
 import java.util.Optional;
 
-public class LoadingAlert{
+public class LoadingAlert {
 
     public enum LoadingStyle {
         SPINNER,
@@ -35,15 +35,15 @@ public class LoadingAlert{
     private final ObjectProperty<LoadingStyle> loadingStyle = new SimpleObjectProperty<>();
     private final DoubleProperty progress = new SimpleDoubleProperty(-1);
 
-    public LoadingAlert(@Nullable Stage stage){
+    public LoadingAlert(@Nullable Stage stage) {
         this(stage, LoadingStyle.SPINNER);
     }
 
-    public LoadingAlert(@Nullable Stage stage, AlertAction... actions){
+    public LoadingAlert(@Nullable Stage stage, AlertAction... actions) {
         this(stage, LoadingStyle.SPINNER, actions);
     }
 
-    public LoadingAlert(@Nullable Stage stage, LoadingStyle loadingStyle, AlertAction... actions){
+    public LoadingAlert(@Nullable Stage stage, LoadingStyle loadingStyle, AlertAction... actions) {
         this.mainAlert = new CustomAlert<>(stage);
         setLoadingStyle(loadingStyle);
 
@@ -64,7 +64,7 @@ public class LoadingAlert{
         mainAlert.setGraphicFill(Color.TRANSPARENT);
     }
 
-    private void initialize(){
+    private void initialize() {
         // invoked after the alert is instantiated
         initListeners();
 
@@ -77,29 +77,29 @@ public class LoadingAlert{
 
         mainAlert.getLayout().getStyleClass().add("loading-alert-layout");
         mainAlert.getLayout().pseudoClassStateChanged(PseudoClass.getPseudoClass("spinner"), isSpinner);
-        mainAlert.getLayout().pseudoClassStateChanged(PseudoClass.getPseudoClass("bar"), ! isSpinner);
+        mainAlert.getLayout().pseudoClassStateChanged(PseudoClass.getPseudoClass("bar"), !isSpinner);
 
         progressIndicator.progressProperty().bindBidirectional(this.progressProperty());
 
-        if (! isSpinner){
+        if (!isSpinner) {
             percentageLabel.getStyleClass().add("percentage");
         }
     }
 
-    private void initListeners(){
+    private void initListeners() {
         progressProperty().addListener((observable, oldValue, newValue) -> {
             updatePercentageText();
         });
     }
 
-    private AlertLayout prepareSpinnerLayout(){
+    private AlertLayout prepareSpinnerLayout() {
 
         this.progressIndicator = new JFXSpinner();
 
-        return new AlertLayout(){
+        return new AlertLayout() {
 
             @Override
-            protected void initialize(){
+            protected void initialize() {
                 super.initialize();
 
                 bodyPane.getChildren().remove(bodyLabel);
@@ -113,15 +113,15 @@ public class LoadingAlert{
         };
     }
 
-    private AlertLayout prepareBarLayout(){
+    private AlertLayout prepareBarLayout() {
 
         this.progressIndicator = new JFXProgressBar();
         this.progressIndicator.setMaxWidth(Double.MAX_VALUE);
 
-        return new AlertLayout(){
+        return new AlertLayout() {
 
             @Override
-            protected void initialize(){
+            protected void initialize() {
                 super.initialize();
 
                 bodyPane.getChildren().remove(bodyLabel);
@@ -139,8 +139,8 @@ public class LoadingAlert{
         };
     }
 
-    private void updatePercentageText(){
-        if (getLoadingStyle() == LoadingStyle.BAR && percentageLabel != null){
+    private void updatePercentageText() {
+        if (getLoadingStyle() == LoadingStyle.BAR && percentageLabel != null) {
             double value = getProgress();
 
             if (value < 0)
@@ -152,13 +152,29 @@ public class LoadingAlert{
         }
     }
 
-    private void setLoadingStyle(LoadingStyle loadingStyle){this.loadingStyle.set(loadingStyle);}
-    public LoadingStyle getLoadingStyle(){return this.loadingStyle.get();}
-    public ReadOnlyObjectProperty<LoadingStyle> loadingStyleProperty(){return this.loadingStyle;}
+    private void setLoadingStyle(LoadingStyle loadingStyle) {
+        this.loadingStyle.set(loadingStyle);
+    }
 
-    public double getProgress() {  return progress.get();}
-    public DoubleProperty progressProperty() {  return progress; }
-    public void setProgress(double progress) {  this.progress.set(progress);}
+    public LoadingStyle getLoadingStyle() {
+        return this.loadingStyle.get();
+    }
+
+    public ReadOnlyObjectProperty<LoadingStyle> loadingStyleProperty() {
+        return this.loadingStyle;
+    }
+
+    public double getProgress() {
+        return progress.get();
+    }
+
+    public DoubleProperty progressProperty() {
+        return progress;
+    }
+
+    public void setProgress(double progress) {
+        this.progress.set(progress);
+    }
 
     public void hide() {
         mainAlert.hideWithAnimation();
@@ -203,7 +219,6 @@ public class LoadingAlert{
     public ObservableList<AlertAction> getAlertActions() {
         return mainAlert.getAlertActions();
     }
-
 
     public void initModality(Modality modality) {
         mainAlert.initModality(modality);

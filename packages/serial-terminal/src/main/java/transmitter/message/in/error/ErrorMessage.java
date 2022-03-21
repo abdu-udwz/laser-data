@@ -1,6 +1,6 @@
-package transmitter.source.message.in.error;
+package transmitter.message.in.error;
 
-import transmitter.source.message.in.InMessage;
+import transmitter.message.in.InMessage;
 
 public class ErrorMessage extends InMessage {
 

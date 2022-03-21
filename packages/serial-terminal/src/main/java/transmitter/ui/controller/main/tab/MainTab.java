@@ -1,11 +1,11 @@
-package transmitter.source.ui.controller.main.tab;
+package transmitter.ui.controller.main.tab;
 
-import transmitter.source.util.Res;
+import transmitter.util.Res;
 
 import java.net.URL;
 
-public enum MainTab{
-    MESSENGER(Res.Fxml.MESSENGER_WINDOW,"Messenger"),
+public enum MainTab {
+    MESSENGER(Res.Fxml.MESSENGER_WINDOW, "Messenger"),
     PAINT(Res.Fxml.PAINT_WINDOW, "Paint"),
     TERMINAL(Res.Fxml.TERMINAL_WINDOW, "Terminal");
 

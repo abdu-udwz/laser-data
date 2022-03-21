@@ -1,4 +1,4 @@
-package transmitter.source.message.in;
+package transmitter.message.in;
 
 public class LightReadingMessage extends InMessage {
 

@@ -1,4 +1,4 @@
-package transmitter.source.ui.controller;
+package transmitter.ui.controller;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.jfoenix.controls.JFXButton;
@@ -17,22 +17,22 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
-import transmitter.source.socket.SocketIdentity;
-import transmitter.source.socket.SocketManager;
-import transmitter.source.ui.controls.alert.AlertAction;
-import transmitter.source.ui.controls.alert.AlertLayout;
-import transmitter.source.ui.controls.alert.CustomAlert;
-import transmitter.source.connection.BAO;
-import transmitter.source.connection.BaudRate;
-import transmitter.source.setting.SettingKey;
-import transmitter.source.setting.Settings;
-import transmitter.source.ui.Alerts;
-import transmitter.source.ui.controller.main.MainController;
-import transmitter.source.ui.controller.main.tab.MainTab;
-import transmitter.source.util.Res;
-import transmitter.source.util.Utils;
-import transmitter.source.util.Windows;
-import transmitter.source.util.logging.terminal.TerminalLoggable;
+import transmitter.socket.SocketIdentity;
+import transmitter.socket.SocketManager;
+import transmitter.ui.controls.alert.AlertAction;
+import transmitter.ui.controls.alert.AlertLayout;
+import transmitter.ui.controls.alert.CustomAlert;
+import transmitter.connection.BAO;
+import transmitter.connection.BaudRate;
+import transmitter.setting.SettingKey;
+import transmitter.setting.Settings;
+import transmitter.ui.Alerts;
+import transmitter.ui.controller.main.MainController;
+import transmitter.ui.controller.main.tab.MainTab;
+import transmitter.util.Res;
+import transmitter.util.Utils;
+import transmitter.util.Windows;
+import transmitter.util.logging.terminal.TerminalLoggable;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -40,7 +40,7 @@ import java.util.logging.Level;
 
 public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlertLayout> implements TerminalLoggable {
 
-    public class ConnectionAlertLayout extends AlertLayout{
+    public class ConnectionAlertLayout extends AlertLayout {
 
         private GridPane inputPane;
         private JFXProgressBar progressBar;
@@ -53,20 +53,28 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
         private JFXButton settingsButton;
         private JFXButton closeButton;
 
-        private class CustomBody extends VBox{
-            @FXML private GridPane inputPane;
-            @FXML private JFXProgressBar progressBar;
-            @FXML private JFXComboBox<SerialPort> serialCombo;
-            @FXML private JFXButton portReloadButton;
-            @FXML private JFXComboBox<BaudRate> baudCombo;
-            @FXML private JFXComboBox<SocketIdentity> socketIdentityCombo;
+        private class CustomBody extends VBox {
+            @FXML
+            private GridPane inputPane;
+            @FXML
+            private JFXProgressBar progressBar;
+            @FXML
+            private JFXComboBox<SerialPort> serialCombo;
+            @FXML
+            private JFXButton portReloadButton;
+            @FXML
+            private JFXComboBox<BaudRate> baudCombo;
+            @FXML
+            private JFXComboBox<SocketIdentity> socketIdentityCombo;
 
-            @FXML private JFXButton connectButton;
-            @FXML private JFXButton settingsButton;
-            @FXML private JFXButton closeButton;
+            @FXML
+            private JFXButton connectButton;
+            @FXML
+            private JFXButton settingsButton;
+            @FXML
+            private JFXButton closeButton;
 
-
-            private CustomBody(){
+            private CustomBody() {
                 FXMLLoader loader = new FXMLLoader(Res.Fxml.CONNECT_DIALOG_LAYOUT.getUrl(), Utils.getBundle());
                 loader.setController(this);
                 loader.setRoot(this);
@@ -89,7 +97,7 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
         }
 
         @Override
-        protected void initialize(){
+        protected void initialize() {
             super.initialize();
             this.getStyleClass().add("connection-alert-layout");
             bodyPane.getChildren().remove(bodyLabel);
@@ -99,7 +107,7 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
 
     private Task<Boolean> connectionTask;
 
-    public ConnectionAlert(){
+    public ConnectionAlert() {
         super((AlertAction) null);
         setLayout(new ConnectionAlertLayout());
 
@@ -119,21 +127,21 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
         layout().setPrefHeight(280);
     }
 
-    private void initComponents(){
+    private void initComponents() {
 
-        Callback<Boolean, JFXListCell<SerialPort> > serialCellFactory = Utils.customCellFactory(serialPort -> {
+        Callback<Boolean, JFXListCell<SerialPort>> serialCellFactory = Utils.customCellFactory(serialPort -> {
             return serialPort.getSystemPortName() + " (" + serialPort.getPortDescription() + ")";
         });
 
-        Callback<Boolean, JFXListCell<SocketIdentity> > socketIdentityCellFactory = Utils.customCellFactory(identity -> {
+        Callback<Boolean, JFXListCell<SocketIdentity>> socketIdentityCellFactory = Utils.customCellFactory(identity -> {
             return identity.displayString;
         });
 
         layout().serialCombo.setButtonCell(serialCellFactory.call(true));
-        layout().serialCombo.setCellFactory(param ->  serialCellFactory.call(false));
+        layout().serialCombo.setCellFactory(param -> serialCellFactory.call(false));
 
         layout().socketIdentityCombo.setButtonCell(socketIdentityCellFactory.call(true));
-        layout().socketIdentityCombo.setCellFactory(param ->  socketIdentityCellFactory.call(false));
+        layout().socketIdentityCombo.setCellFactory(param -> socketIdentityCellFactory.call(false));
 
         layout().serialCombo.getItems().clear();
         layout().baudCombo.getItems().clear();
@@ -143,14 +151,14 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
         layout().baudCombo.getValidators().add(fieldValidator);
         layout().socketIdentityCombo.getValidators().add(fieldValidator);
 
-        //TODO: check this it's not good practice
+        // TODO: check this it's not good practice
         // use background thread..
         layout().serialCombo.getItems().addAll(SerialPort.getCommPorts());
         layout().baudCombo.getItems().addAll(BaudRate.values());
         layout().socketIdentityCombo.getItems().addAll(SocketIdentity.values());
     }
 
-    private void initListeners(){
+    private void initListeners() {
 
         layout().portReloadButton.setOnAction(event -> {
             layout().serialCombo.getItems().clear();
@@ -159,25 +167,24 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
 
         layout().connectButton.setOnAction(event -> {
 
-            if (connectionTask != null && connectionTask.isRunning()){
+            if (connectionTask != null && connectionTask.isRunning()) {
                 // when there's a connection task currently running
                 BAO.serial().close();
                 connectionTask.cancel(true);
                 updateConnectButton(false, false);
-            }
-            else{
+            } else {
                 connectToBoard();
             }
         });
 
         Settings.addChangeListener(keys -> {
             // when user changes the baud rate ... change baud rate here too
-            if (keys.contains(SettingKey.BAUD_RATE)){
+            if (keys.contains(SettingKey.BAUD_RATE)) {
                 BaudRate baudRate = BaudRate.valueOf(Settings.getString(SettingKey.BAUD_RATE));
                 layout().baudCombo.setValue(baudRate);
             }
 
-            if (keys.contains(SettingKey.SOCKET_IDENTITY)){
+            if (keys.contains(SettingKey.SOCKET_IDENTITY)) {
                 SocketIdentity identity = SocketIdentity.valueOf(Settings.getString(SettingKey.SOCKET_IDENTITY));
                 layout().socketIdentityCombo.setValue(identity);
             }
@@ -190,9 +197,9 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
         layout().closeButton.setOnAction(event -> this.close());
     }
 
-    private void connectToBoard(){
+    private void connectToBoard() {
 
-        if (! validateInput())
+        if (!validateInput())
             return;
 
         SerialPort serialPort = getSelectedSerialPort();
@@ -241,14 +248,15 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
             logTerminal(Level.SEVERE, "An error occurred while connecting to board.");
             updateConnectButton(false, false);
 
-            String body = "An error occurred while configuring the connection with the board on port " + serialPort.getSystemPortName() + ".\n\n" +
+            String body = "An error occurred while configuring the connection with the board on port "
+                    + serialPort.getSystemPortName() + ".\n\n" +
                     "Make sure the selected port is for the board. If this error occurred again try restarting the board.";
 
             Alerts.errorAlert(null,
-                              "Cannot Connect to board",
-                                body,
-                              event.getSource().getException(),
-                              AlertAction.OK);
+                    "Cannot Connect to board",
+                    body,
+                    event.getSource().getException(),
+                    AlertAction.OK);
 
         });
 
@@ -260,19 +268,18 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
             this.close();
         });
 
-
         new Thread(null, connectionTask, "connection task").start();
     }
 
-    private boolean validateInput(){
+    private boolean validateInput() {
         boolean portName = layout().serialCombo.validate();
         boolean baudRate = layout().baudCombo.validate();
         boolean socketIdentity = layout().socketIdentityCombo.validate();
         return portName && baudRate && socketIdentity;
     }
 
-    private void updateProgressView(boolean progress){
-        //TODO: fix this for performance
+    private void updateProgressView(boolean progress) {
+        // TODO: fix this for performance
         if (progress)
             layout().progressBar.setProgress(-1);
         else
@@ -286,7 +293,7 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
         layout().progressBar.setVisible(progress);
     }
 
-    private void updateConnectButton(boolean disable, boolean cancel){
+    private void updateConnectButton(boolean disable, boolean cancel) {
         layout().connectButton.setDisable(disable);
         if (cancel)
             layout().connectButton.setText("Cancel");
@@ -294,41 +301,39 @@ public class ConnectionAlert extends CustomAlert<ConnectionAlert.ConnectionAlert
             layout().connectButton.setText("Connect");
     }
 
-    public void setSelectedSerialPort(SerialPort portName){
+    public void setSelectedSerialPort(SerialPort portName) {
         layout().serialCombo.setValue(portName);
     }
 
-    public SerialPort getSelectedSerialPort(){
+    public SerialPort getSelectedSerialPort() {
         return layout().serialCombo.getValue();
     }
 
-    public ObjectProperty<SerialPort> selectedSerialPortProperty(){
+    public ObjectProperty<SerialPort> selectedSerialPortProperty() {
         return layout().serialCombo.valueProperty();
     }
 
-
-    public void setSelectedBaudRate(BaudRate rate){
+    public void setSelectedBaudRate(BaudRate rate) {
         layout().baudCombo.setValue(rate);
     }
 
-    public BaudRate getSelectedBaudRate(){
+    public BaudRate getSelectedBaudRate() {
         return layout().baudCombo.getValue();
     }
 
-    public ObjectProperty<BaudRate> selectedBaudRateProperty(){
+    public ObjectProperty<BaudRate> selectedBaudRateProperty() {
         return layout().baudCombo.valueProperty();
     }
 
-
-    public void setSelectedSocketIdentity(SocketIdentity identity){
+    public void setSelectedSocketIdentity(SocketIdentity identity) {
         layout().socketIdentityCombo.setValue(identity);
     }
 
-    public SocketIdentity getSelectedSocketIdentity(){
+    public SocketIdentity getSelectedSocketIdentity() {
         return layout().socketIdentityCombo.getValue();
     }
 
-    public ObjectProperty<SocketIdentity> selectedSocketIdentityProperty(){
+    public ObjectProperty<SocketIdentity> selectedSocketIdentityProperty() {
         return layout().socketIdentityCombo.valueProperty();
     }
 

@@ -1,6 +1,6 @@
-package transmitter.source.message.in;
+package transmitter.message.in;
 
-import transmitter.source.message.SerialMessage;
+import transmitter.message.SerialMessage;
 
 public abstract class InMessage extends SerialMessage {
 

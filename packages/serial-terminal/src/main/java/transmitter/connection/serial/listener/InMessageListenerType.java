@@ -1,13 +1,13 @@
-package transmitter.source.connection.serial.listener;
+package transmitter.connection.serial.listener;
 
-import transmitter.source.connection.BAO;
-import transmitter.source.message.in.InMessage;
+import transmitter.connection.BAO;
+import transmitter.message.in.InMessage;
 
 public enum InMessageListenerType {
 
     LIGHT_READ(InMessage.LIGHT_READ_MESSAGE_PREFIX),
-    BOARD_INFO (InMessage.INFO_MESSAGE_PREFIX),
-    BOARD_ERROR (InMessage.ERROR_MESSAGE_PREFIX),
+    BOARD_INFO(InMessage.INFO_MESSAGE_PREFIX),
+    BOARD_ERROR(InMessage.ERROR_MESSAGE_PREFIX),
     UNKNOWN(null),;
 
     private final String pattern;

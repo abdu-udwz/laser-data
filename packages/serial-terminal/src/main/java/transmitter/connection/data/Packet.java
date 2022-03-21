@@ -1,9 +1,8 @@
-package transmitter.source.connection.data;
+package transmitter.connection.data;
 
 import javafx.collections.ObservableList;
-import jdk.nashorn.internal.ir.EmptyNode;
-import transmitter.source.encode.Determiner;
-import transmitter.source.encode.Encoding;
+import transmitter.encode.Determiner;
+import transmitter.encode.Encoding;
 
 import java.util.Arrays;
 
@@ -18,7 +17,7 @@ public class Packet {
     public final int dataStartIndex;
     public final int dataEndIndex;
 
-    private Packet(byte[] bytes, int index, int frameSize,int dataStartIndex, int dataEndIndex){
+    private Packet(byte[] bytes, int index, int frameSize, int dataStartIndex, int dataEndIndex) {
         this.size = bytes.length;
         this.bytes = bytes;
         this.index = index;
@@ -28,7 +27,7 @@ public class Packet {
         this.dataEndIndex = dataEndIndex;
     }
 
-    public static Packet getTransmitInstance(byte[] determiner, byte[] data, int index, int frameSize){
+    public static Packet getTransmitInstance(byte[] determiner, byte[] data, int index, int frameSize) {
 
         // packet consist of:
         // start line: 2x (1 byte)
@@ -79,7 +78,7 @@ public class Packet {
         return new Packet(bytes, index, frameSize, dataStartIndex, dataEndIndex);
     }
 
-    public static Packet getReceiverInstance(byte[] binary, int dataStartIndex, int dataEndIndex){
+    public static Packet getReceiverInstance(byte[] binary, int dataStartIndex, int dataEndIndex) {
 
         int indexStart = dataEndIndex;
         int indexEnd = indexStart + 1;
@@ -89,34 +88,34 @@ public class Packet {
         int frameSizeEnd = frameSizeStart + 1;
         Short frameSize = Encoding.decodeShort(Arrays.copyOfRange(binary, frameSizeStart, frameSizeEnd + 1));
 
-        return new Packet(binary,index, frameSize, dataStartIndex, dataEndIndex);
+        return new Packet(binary, index, frameSize, dataStartIndex, dataEndIndex);
     }
 
-    public int size(){
+    public int size() {
         return size;
     }
 
-    public int dataSize(){
-        return dataEndIndex -dataStartIndex;
+    public int dataSize() {
+        return dataEndIndex - dataStartIndex;
     }
 
-    public int index(){
+    public int index() {
         return index;
     }
 
-    public int frameSize(){
+    public int frameSize() {
         return frameSize;
     }
 
-    public byte[] getData(){
+    public byte[] getData() {
         return Arrays.copyOfRange(bytes, dataStartIndex, dataEndIndex);
     }
 
-    public byte[] getBytes(){
+    public byte[] getBytes() {
         return bytes;
     }
 
-    public ObservableList<String> getBinaryStrings(){
+    public ObservableList<String> getBinaryStrings() {
         return Encoding.toBinaryStrings(bytes);
     }
 }

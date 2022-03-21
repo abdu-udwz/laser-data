@@ -1,9 +1,9 @@
-package transmitter.source.setting;
+package transmitter.setting;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import static transmitter.source.util.Utils.DEFAULT_PROPERTIES;
+import static transmitter.util.Utils.DEFAULT_PROPERTIES;
 
 public enum SettingKey {
 
@@ -52,13 +52,13 @@ public enum SettingKey {
         this.type = type;
     }
 
-    public static ObservableList<SettingKey> protcolKeys(){
-        return FXCollections.observableArrayList(   SettingKey.BIT_DELAY,
-                                                    SettingKey.PACKET_DETERMINER,
-                                                    SettingKey.TEXT_ENCODING_CHARSET,
-                                                    SettingKey.PACKET_SIZE,
-                                                    SettingKey.PACKET_INTERVAL,
-                                                    SettingKey.LIGHT_HIGH_VALUE,
-                                                    SettingKey.BYTE_CORRECTION);
+    public static ObservableList<SettingKey> protcolKeys() {
+        return FXCollections.observableArrayList(SettingKey.BIT_DELAY,
+                SettingKey.PACKET_DETERMINER,
+                SettingKey.TEXT_ENCODING_CHARSET,
+                SettingKey.PACKET_SIZE,
+                SettingKey.PACKET_INTERVAL,
+                SettingKey.LIGHT_HIGH_VALUE,
+                SettingKey.BYTE_CORRECTION);
     }
 }
