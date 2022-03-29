@@ -21,7 +21,7 @@ export interface SocketEventListener {
 }
 const eventListeners: SocketEventListener[] = [];
 
-function init(socketServer: Server): void {
+export function init(socketServer: Server): void {
   io = socketServer;
   socketServer.on('connection', function (socket) {
     console.log('[Socket]:', 'New socket connected with id', socket.id);
@@ -106,45 +106,38 @@ function registerEventListenerOnSocket(socket: Socket, listener: SocketEventList
   socket.on(eventName, eventCallback)
 }
 
-function removeEventListenersFromSocket(socket: Socket, listener: SocketEventListener) {
+export function removeEventListenersFromSocket(socket: Socket, listener: SocketEventListener) {
   socket.removeAllListeners(`${listener.prefix}_${listener.event}`);
 }
 
 // ==================================== //
 
-function getIdentitySockets(identity: SocketIdentity) {
+export function getIdentitySockets(identity: SocketIdentity) {
   return identifiedSockets.filter(item => item.identity === identity);
 }
 
 // =============================== //
 
-function emitToIdentity(identity: SocketIdentity, event: string, ...args: any[]) {
+export function emitToIdentity(identity: SocketIdentity, event: string, ...args: any[]) {
   io!.to(identity).emit(event, ...args)
 }
 
-module.exports = {
-
-  init,
-
-  emitToIdentity,
-
-  emitToTransceiver(identity: SocketIdentity, event: string, ...args: any[]) {
-    let matched = identifiedSockets.find(item => item.type === 'TRANSCEIVER' && item.identity === identity);
-    if (matched) {
-      io?.to(matched.socket.id).emit(event, ...args);
-    }
-  },
-
-  registerEventListener(prefix: string, event: string, callback: () => void) {
-
-    eventListeners.push({
-      prefix,
-      event,
-      callback
-    });
-  },
-
-  isTransceiverOnline(identity: SocketIdentity) {
-    return identifiedSockets.findIndex(item => item.identity === identity && item.type === 'TRANSCEIVER') > -1;
+export function emitToTransceiver(identity: SocketIdentity, event: string, ...args: any[]) {
+  let matched = identifiedSockets.find(item => item.type === 'TRANSCEIVER' && item.identity === identity);
+  if (matched) {
+    io?.to(matched.socket.id).emit(event, ...args);
   }
-};
+}
+
+export function registerEventListener(prefix: string, event: string, callback: SocketEventListener['callback']) {
+
+  eventListeners.push({
+    prefix,
+    event,
+    callback
+  });
+}
+
+export function isTransceiverOnline(identity: SocketIdentity) {
+  return identifiedSockets.findIndex(item => item.identity === identity && item.type === 'TRANSCEIVER') > -1;
+}
