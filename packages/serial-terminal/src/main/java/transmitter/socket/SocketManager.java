@@ -28,7 +28,11 @@ public abstract class SocketManager {
     private static final BooleanProperty connected = new SimpleBooleanProperty(false);
 
     public static void connect(SocketIdentity identity, String host) throws URISyntaxException {
-        socket = IO.socket(host);
+        IO.Options options = IO.Options.builder()
+                .setPath("/_api/socket.io")
+                .build();
+
+        socket = IO.socket(host, options);
 
         socket.on(Socket.EVENT_CONNECT, args -> {
             logTerminal(Level.INFO, String.format("Connected successfully to [%s] as %s", host, identity.name()));
