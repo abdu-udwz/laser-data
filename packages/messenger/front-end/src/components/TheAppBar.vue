@@ -1,7 +1,7 @@
 <template>
-  <v-toolbar color="primary">
-    <v-toolbar-title>
-      <v-img
+  <VToolbar color="primary">
+    <VToolbarTitle>
+      <VImg
         alt="Vuetify Name"
         class="shrink mt-1 hidden-sm-and-down"
         contain
@@ -9,27 +9,30 @@
         src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
         width="100"
       />
-    </v-toolbar-title>
+    </VToolbarTitle>
 
-    <v-spacer></v-spacer>
+    <VSpacer />
 
     <!--   online status circle     -->
-    <v-toolbar-items>
-      <v-icon small :color="transceiverOnline ? 'green' : 'grey'">
+    <VToolbarItems>
+      <VIcon
+        small
+        :color="transceiverOnline ? 'green' : 'grey'"
+      >
         mdi-circle
-      </v-icon>
+      </VIcon>
 
-      <v-btn
+      <VBtn
         :loading="receiverPending"
         :disabled="receiverToggleDisabled"
         dark
         icon
         @click="toggleReceiver"
       >
-        <v-icon>{{ receiverToggleIcon }}</v-icon>
-      </v-btn>
+        <VIcon>{{ receiverToggleIcon }}</VIcon>
+      </VBtn>
 
-      <v-select
+      <VSelect
         v-model="identity"
         :items="identities"
         filled
@@ -40,75 +43,73 @@
         menu-props="offset-y"
         hide-details
         class="mt-1"
-      >
-      </v-select>
-    </v-toolbar-items>
-  </v-toolbar>
+      />
+    </VToolbarItems>
+  </VToolbar>
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-  name: "TheAppBar",
+  name: 'TheAppBar',
 
-  data() {
+  data () {
     return {
       identities: [
         {
-          text: "Alpha",
-          value: "ALPHA",
+          text: 'Alpha',
+          value: 'ALPHA',
         },
         {
-          text: "Beta",
-          value: "BETA",
+          text: 'Beta',
+          value: 'BETA',
         },
       ],
-    };
+    }
   },
 
   computed: {
     identity: {
       get: function () {
-        return this.$store.state.identity;
+        return this.$store.state.identity
       },
 
       set: function (newIdentity) {
-        this.$store.dispatch("setIdentity", newIdentity);
+        this.$store.dispatch('setIdentity', newIdentity)
       },
     },
 
-    receiverToggleIcon() {
-      let isReceiving = this.$store.getters.isReceiving;
+    receiverToggleIcon () {
       if (!this.transceiverOnline || !this.isReceiving) {
-        return "mdi-access-point-network-off";
+        return 'mdi-access-point-network-off'
       } else {
-        return "mdi-access-point-network";
+        return 'mdi-access-point-network'
       }
     },
 
-    receiverToggleDisabled() {
-      if (!this.transceiverOnline) return true;
+    receiverToggleDisabled () {
+      if (!this.transceiverOnline) return true
 
-      return this.receiverPending || !(this.isStandBy || this.isReceiving);
+      return this.receiverPending || !(this.isStandBy || this.isReceiving)
     },
 
-    ...mapState(["receiverPending", "transceiverOnline"]),
-    ...mapGetters(["isStandBy", "isReceiving", "isTransmitting"]),
+    ...mapState(['receiverPending', 'transceiverOnline']),
+    ...mapGetters(['isStandBy', 'isReceiving', 'isTransmitting']),
   },
 
   methods: {
-    toggleReceiver() {
-      this.$store.dispatch("toggleReceiver");
+    toggleReceiver () {
+      this.$store.dispatch('toggleReceiver')
     },
   },
 
   sockets: {
-    connect() {
-      this.$store.dispatch("setIdentity", this.identity);
+    connect () {
+      this.$store.dispatch('setIdentity', this.identity)
     },
   },
-};
+}
 </script>
 
 <style scoped>

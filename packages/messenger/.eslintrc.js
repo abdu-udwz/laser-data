@@ -62,24 +62,24 @@ module.exports = {
     }],
 
     'indent': 'off',
-    '@typescript-eslint/indent': ['error', 2 ],
+    '@typescript-eslint/indent': ['error', 2],
     'quotes': 'off',
-    '@typescript-eslint/quotes': ['error', 'single' ],
+    '@typescript-eslint/quotes': ['error', 'single'],
     'semi': 'off',
     '@typescript-eslint/semi': ['error', 'never'],
 
     'brace-style': 'off',
-    '@typescript-eslint/brace-style': ['error' ],
+    '@typescript-eslint/brace-style': ['error'],
     'object-curly-spacing': 'off',
     '@typescript-eslint/object-curly-spacing': ['error', 'always'],
     'comma-spacing': 'off',
-    '@typescript-eslint/comma-spacing': ['error' ],
+    '@typescript-eslint/comma-spacing': ['error'],
     'comma-dangle': 'off',
-    '@typescript-eslint/comma-dangle': ['error', 'always-multiline' ],
-    
+    '@typescript-eslint/comma-dangle': ['error', 'always-multiline'],
+
 
     'space-before-function-paren': 'off',
-    '@typescript-eslint/space-before-function-paren': ['error' ],
+    '@typescript-eslint/space-before-function-paren': ['error'],
 
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-function-return-type': ['error', {

@@ -1,49 +1,50 @@
 <template>
-  <v-container>
-    <v-card height="85vh" class="d-flex">
-      <v-card-text class="flex-grow-1 d-flex flex-column">
+  <VContainer>
+    <VCard
+      height="85vh"
+      class="d-flex"
+    >
+      <VCardText class="flex-grow-1 d-flex flex-column">
         <!--    messages container        -->
-        <message-container class="flex-grow-1" :messages="messages">
-        </message-container>
+        <MessageContainer
+          class="flex-grow-1"
+          :messages="messages"
+        />
 
-        <v-divider class="my-1"></v-divider>
+        <VDivider class="my-1" />
 
         <div class="d-flex flex-column mb-2 mx-2">
-          <v-alert
+          <VAlert
+            v-model="showAlert"
             dense
             type="error"
             :icon="false"
-            v-model="showAlert"
             transition="scale-transition"
           >
             Please wait for the message to arrive first
-          </v-alert>
+          </VAlert>
           <!-- progress bar-->
 
           <template v-if="isTransmitting">
             <div class="d-flex justify-end">
-              <span class="mx-2"
-                >{{ progress }}% ({{
-                  `${transmitProgress.sentBytes} of ${transmitProgress.totalBytes}`
-                }})</span
-              >
-              <span
-                >{{ transmitProgress.remainingSeconds.toFixed(2) }} sec
-                left</span
-              >
+              <span class="mx-2">{{ progress }}% ({{
+                `${transmitProgress.sentBytes} of ${transmitProgress.totalBytes}`
+              }})</span>
+              <span>{{ transmitProgress.remainingSeconds.toFixed(2) }} sec
+                left</span>
             </div>
-            <v-progress-linear
+            <VProgressLinear
+              v-model="progress"
               class="mb-2"
               height="8"
               rounded
-              v-model="progress"
-            >
-            </v-progress-linear>
+            />
           </template>
 
           <!--   input box         -->
 
-          <v-text-field
+          <VTextField
+            v-model="input"
             :disabled="inputDisabled"
             flat
             solo
@@ -53,71 +54,69 @@
             hide-details
             placeholder="Type here.."
             append-icon="mdi-send"
-            v-model="input"
             @keydown="onKeyDown"
             @click:append="send"
-          >
-          </v-text-field>
+          />
         </div>
-      </v-card-text>
-    </v-card>
-  </v-container>
+      </VCardText>
+    </VCard>
+  </VContainer>
 </template>
 
 <script>
-import MessageContainer from "./MessageContainer.vue";
-import { mapGetters, mapState } from "vuex";
+import MessageContainer from './MessageContainer.vue'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
-  name: "TheMessenger",
+  name: 'TheMessenger',
 
   components: {
     MessageContainer,
   },
 
-  data() {
+  data () {
     return {
       input: null,
       showAlert: false,
-    };
+    }
   },
 
   computed: {
-    messages() {
-      return this.$store.state.messages;
+    messages () {
+      return this.$store.state.messages
     },
 
-    inputDisabled() {
-      return !this.isStandBy || !this.$store.state.transceiverOnline;
+    inputDisabled () {
+      return !this.isStandBy || !this.$store.state.transceiverOnline
     },
 
-    progress() {
+    progress () {
       let percentage =
         (this.transmitProgress.sentBytes / this.transmitProgress.totalBytes) *
-        100;
-      return Math.ceil(percentage);
+        100
+      return Math.ceil(percentage)
     },
-    ...mapState(["transmitProgress"]),
-    ...mapGetters(["isStandBy", "isTransmitting", "isReceiving"]),
+    ...mapState(['transmitProgress']),
+    ...mapGetters(['isStandBy', 'isTransmitting', 'isReceiving']),
   },
 
   methods: {
-    send() {
-      let message = this.input;
-      if (!message || !message.trim()) return;
-      message = message.trim();
+    send () {
+      let message = this.input
+      if (!message || !message.trim()) return
+      message = message.trim()
 
-      this.$store.dispatch("sendMessage", message);
-      this.input = "";
+      this.$store.dispatch('sendMessage', message)
+      this.input = ''
     },
 
-    onKeyDown(event) {
-      if (event.key === "Enter") {
-        this.send();
+    onKeyDown (event) {
+      if (event.key === 'Enter') {
+        this.send()
       }
     },
   },
-};
+}
 </script>
 
 <style scoped>
