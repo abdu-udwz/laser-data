@@ -1,0 +1,17 @@
+.DS_Store
+node_modules/
+.env
+
+# IDE user config
+.vscode/
+.idea/
+.vs/
+
+# Build
+**/dist/
+
+# Logs
+**/.pnpm-debug*
+
+# Test coveratge
+converage

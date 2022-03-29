@@ -1,5 +1,3 @@
-node_modules
 pubilc
 
-# Editor directories and files
-.idea
+.env

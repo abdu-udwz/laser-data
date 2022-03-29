@@ -41,10 +41,12 @@ function socketSignIn(socket, identity, type) {
     let matchedInfo = identifiedSockets.find(item => item.socket.id === socket.id);
 
     if (matchedInfo) {
+        // socket has signed in previously
+        // update the identity
         socket.leave(matchedInfo.identity);
         matchedInfo.identity = identity;
     } else {
-        identifiedSockets.push({socket: socket, identity: identity, type: type});
+        identifiedSockets.push({ socket: socket, identity: identity, type: type });
         for (let listener of eventListeners) {
             registerEventListenerOnSocket(socket, listener);
         }
@@ -70,11 +72,10 @@ function socketDisconnected(socket) {
 
         identifiedSockets.splice(matchedIndex, 1);
 
-        if (matchedInfo.type === 'TRANSCEIVER'){
+        if (matchedInfo.type === 'TRANSCEIVER') {
             emitToIdentity(identity, "TRANSCEIVER_stateUpdated", false)
         }
         console.log(`[Socket]: Socket ${socket.id} disconnected.`);
-
     }
 
 }

@@ -1,5 +1,3 @@
-import io from 'socket.io-client';
-
-let socket = io(process.env.VUE_APP_API_URL);
+let socket = io();
 
 export default socket;

@@ -1,27 +1,26 @@
 <template>
-    <v-app>
-        <the-app-bar></the-app-bar>
-        <v-content>
-            <the-messenger></the-messenger>
-        </v-content>
-    </v-app>
+  <v-app>
+    <the-app-bar></the-app-bar>
+    <v-main>
+      <the-messenger></the-messenger>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
+import TheMessenger from "@/components/message/TheMessenger.vue";
+import TheAppBar from "@/components/TheAppBar.vue";
 
-    import TheMessenger from "@/components/message/TheMessenger";
-    import TheAppBar from "@/components/TheAppBar";
+export default {
+  name: "App",
 
-    export default {
-        name: 'App',
+  components: {
+    TheAppBar,
+    TheMessenger,
+  },
 
-        components: {
-            TheAppBar,
-            TheMessenger
-        },
-
-        data: () => ({
-            //
-        }),
-    };
+  data: () => ({
+    //
+  }),
+};
 </script>
