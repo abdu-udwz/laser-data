@@ -11,6 +11,7 @@ declare module 'vue' {
     TheMessenger: typeof import('./src/components/message/TheMessenger.vue')['default']
     VAlert: typeof import('vuetify/lib')['VAlert']
     VApp: typeof import('vuetify/lib')['VApp']
+    VBadge: typeof import('vuetify/lib')['VBadge']
     VBtn: typeof import('vuetify/lib')['VBtn']
     VCard: typeof import('vuetify/lib')['VCard']
     VCardText: typeof import('vuetify/lib')['VCardText']

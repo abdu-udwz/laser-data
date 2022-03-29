@@ -9,24 +9,25 @@
     <VSpacer />
 
     <!--   online status circle     -->
-    <VToolbarItems>
-      <VIcon
-        small
-        :color="transceiverOnline ? 'green' : 'grey'"
-      >
-        {{ mdiCircle }}
-      </VIcon>
-
+    <VBadge
+      :color="transceiverOnline ? 'green' : 'grey'"
+      left
+      dot
+      offset-x="22"
+      offset-y="22"
+    >
       <VBtn
+        class="mt-2 mx-2"
+        color="white"
         :loading="receiverPending"
         :disabled="receiverToggleDisabled"
-        dark
         icon
         @click="toggleReceiver"
       >
         <VIcon>{{ receiverToggleIcon }}</VIcon>
       </VBtn>
-
+    </VBadge>
+    <VToolbarItems>
       <VSelect
         v-model="identity"
         :items="identities"
