@@ -1,14 +1,16 @@
-const router = require('express').Router();
-const SocketManager = require('../socket/SocketManager');
+import { Router } from 'express'
+import * as SocketManager from '../socket/SocketManager'
 
+const router = Router()
 
-router.post('/transmitMessage', (req, res, next) => {
-    let targetIdentity = req.query.target.toUpperCase();
+router.post('/transmitMessage', (req, res) => {
+  let targetIdentity = req.query.target.toUpperCase()
 
-    let message = req.body.message;
+  let message = req.body.message
 
-    SocketManager.emitToIdentity(targetIdentity, "TRANSMIT_sendMessage", message);
-    return res.sendStatus(200);
-});
+  SocketManager.emitToIdentity(targetIdentity, 'TRANSMIT_sendMessage', message)
+  return res.sendStatus(200)
+})
 
-module.exports = router;
+// eslint-disable-next-line no-undef
+export default router
