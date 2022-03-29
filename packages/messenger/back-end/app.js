@@ -1,7 +1,10 @@
 const express = require('express')
-const path = require('path')
+// middleware
+const { createProxyMiddleware } = require('http-proxy-middleware')
 const logger = require('morgan')
 const developerRouter = require('./routes/developer')
+// util
+const path = require('path')
 
 const MessengerController = require('./controllers/MessengerController')
 
@@ -9,29 +12,19 @@ const app = express()
 
 // view engine setup
 
-app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/dev', developerRouter);
-/*
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+app.use('/dev', logger('dev'), developerRouter);
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+if (process.env.NODE_ENV == null || process.env.NODE_ENV === 'development') {
+  app.use('/', createProxyMiddleware(process.env.APP_SERVER_URL ?? 'http://localhost:8080', {
+    secure: false,
+    changeOrigin: true,
+    ws: true,
+  }))
+}
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
- */
 
 module.exports = app;

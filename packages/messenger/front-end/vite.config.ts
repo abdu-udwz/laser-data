@@ -21,36 +21,7 @@ if (fs.existsSync(path.resolve(ABS_ROOT_DIR, 'styles/variables.scss'))) {
 
 // console.log(sassAdditionalData, scssAdditionalData)
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
-  let { SERVER_HOST, SERVER_BASE_PATH, SERVER_API_PATH } = loadEnv(mode, process.cwd(), '')
-
-
-  // == dev serve proxy-ing config
-  let relativeToServerPath = ''
-  let serverBaseUrl = ''
-  let serverApiURL = ''
-  if (command === 'serve') {
-    if (SERVER_HOST == null) {
-      SERVER_HOST = 'http://localhost:3000'
-    }
-
-    if (SERVER_BASE_PATH == null) {
-      SERVER_BASE_PATH = '/'
-    }
-
-    if (SERVER_API_PATH == null) {
-      SERVER_API_PATH = '/_api'
-    }
-
-    // prepare server urls
-    relativeToServerPath = path.join(SERVER_BASE_PATH, SERVER_API_PATH)
-    serverBaseUrl = new URL(SERVER_BASE_PATH, SERVER_HOST).href
-    serverApiURL = new URL(relativeToServerPath, SERVER_HOST).href
-
-    console.log('Use server at', serverBaseUrl, 'as API server')
-    console.log('Full API url is:', serverApiURL)
-  }
-
+export default defineConfig(() => {
   return {
     plugins: [
       createVuePlugin(/* options */),
@@ -77,13 +48,6 @@ export default defineConfig(({ command, mode }) => {
     },
     server: {
       port: 8080,
-      proxy: {
-        '/_api': {
-          target: serverBaseUrl,
-          changeOrigin: true,
-          secure: false,
-        },
-      },
     },
   }
 })
