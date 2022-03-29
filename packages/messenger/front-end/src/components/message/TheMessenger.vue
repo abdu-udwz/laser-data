@@ -53,7 +53,7 @@
             single-line
             hide-details
             placeholder="Type here.."
-            append-icon="mdi-send"
+            :append-icon="mdiSend"
             @keydown="onKeyDown"
             @click:append="send"
           />
@@ -66,6 +66,8 @@
 <script>
 import MessageContainer from './MessageContainer.vue'
 import { mapGetters, mapState } from 'vuex'
+
+import { mdiSend } from '@mdi/js'
 
 export default {
   name: 'TheMessenger',
@@ -98,6 +100,10 @@ export default {
     },
     ...mapState(['transmitProgress']),
     ...mapGetters(['isStandBy', 'isTransmitting', 'isReceiving']),
+  },
+
+  created () {
+    this.mdiSend = mdiSend    
   },
 
   methods: {

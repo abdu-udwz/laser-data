@@ -29,7 +29,7 @@
             small
             color="white"
           >
-            mdi-check
+            {{ mdiCheck }}
           </VIcon>
         </div>
       </div>
@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import { mdiCheck } from '@mdi/js'
+
 export default {
   name: 'MessageBase',
 
@@ -53,6 +55,10 @@ export default {
     isSent (){
       return this.message.owner === this.$store.state.identity
     },
+  },
+
+  created () {
+    this.mdiCheck = mdiCheck
   },
 }
 </script>

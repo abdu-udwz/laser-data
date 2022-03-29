@@ -8,6 +8,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@mdi/js": "^6.6.96",
     "vue": "^2.6.10",
     "vue-moment": "^4.0.0",
     "vue-socket.io": "^3.0.7",

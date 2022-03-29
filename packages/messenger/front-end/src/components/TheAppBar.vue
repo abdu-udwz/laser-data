@@ -1,14 +1,9 @@
 <template>
-  <VToolbar color="primary">
-    <VToolbarTitle>
-      <VImg
-        alt="Vuetify Name"
-        class="shrink mt-1 hidden-sm-and-down"
-        contain
-        min-width="100"
-        src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-        width="100"
-      />
+  <VToolbar 
+    color="primary"
+  >
+    <VToolbarTitle class="white--text">
+      LaserData
     </VToolbarTitle>
 
     <VSpacer />
@@ -19,7 +14,7 @@
         small
         :color="transceiverOnline ? 'green' : 'grey'"
       >
-        mdi-circle
+        {{ mdiCircle }}
       </VIcon>
 
       <VBtn
@@ -39,7 +34,7 @@
         flat
         solo
         label="Identity"
-        prepend-inner-icon="mdi-account"
+        :prepend-inner-icon="mdiAccount"
         menu-props="offset-y"
         hide-details
         class="mt-1"
@@ -50,6 +45,11 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { mdiAccessPointNetworkOff,
+  mdiAccessPointNetwork,
+  mdiCircle,
+  mdiAccount, 
+} from '@mdi/js'
 
 export default {
   name: 'TheAppBar',
@@ -82,9 +82,9 @@ export default {
 
     receiverToggleIcon () {
       if (!this.transceiverOnline || !this.isReceiving) {
-        return 'mdi-access-point-network-off'
+        return mdiAccessPointNetworkOff
       } else {
-        return 'mdi-access-point-network'
+        return mdiAccessPointNetwork
       }
     },
 
@@ -96,6 +96,11 @@ export default {
 
     ...mapState(['receiverPending', 'transceiverOnline']),
     ...mapGetters(['isStandBy', 'isReceiving', 'isTransmitting']),
+  },
+
+  created () {
+    this.mdiCircle = mdiCircle
+    this.mdiAccount = mdiAccount
   },
 
   methods: {
