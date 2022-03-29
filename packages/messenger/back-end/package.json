@@ -4,7 +4,7 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "dev": "nodemon -r dotenv/config  ./bin/www"
+    "dev": "ts-node-dev -r dotenv/config bin/www.ts"
   },
   "dependencies": {
     "debug": "^4.3.4",
@@ -12,10 +12,11 @@
     "express": "latest",
     "http-proxy-middleware": "^2.0.4",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.2",
     "socket.io": "^4.4.1"
   },
   "devDependencies": {
-    "@types/node": "^16.0.0"
+    "@tsconfig/node16": "^1.0.1",
+    "@types/node": "^16.0.0",
+    "ts-node-dev": "^1.1.8"
   }
 }

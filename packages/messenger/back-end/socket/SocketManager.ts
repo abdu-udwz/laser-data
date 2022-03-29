@@ -1,20 +1,15 @@
+import type { Server, Socket } from 'socket.io'
 let io = null;
 
 // a list contains a list of connected sockets associated with some info like
 // to whom it belongs, an authenticated user or just a guest.
 const identifiedSockets = [];
 
-// a list of event listeners to attach to sockets
-//  {
-//      prefix: String,
-//      event: String,
-//  }
-
 const eventListeners = [];
 
-function init(socketManager) {
-    io = socketManager;
-    socketManager.on('connection', function (socket) {
+function init(socketServer: Server) {
+    io = socketServer;
+    socketServer.on('connection', function (socket) {
         console.log('[Socket]:', 'New socket connected with id', socket.id);
 
         socketConnected(socket);
@@ -37,7 +32,11 @@ function socketConnected(socket) {
 
 }
 
-function socketSignIn(socket, identity, type) {
+export type SocketIdentity = 'ALPHA' | 'BETA'
+export type SocketDeviceType = 'TRANSCEIVER' | 'REMOTE_CONTROL'
+
+
+function socketSignIn(socket: Socket, identity: SocketIdentity, type: SocketDeviceType) {
     let matchedInfo = identifiedSockets.find(item => item.socket.id === socket.id);
 
     if (matchedInfo) {
@@ -61,7 +60,7 @@ function socketSignIn(socket, identity, type) {
     console.log(`[Socket]: Socket with id ${socket.id} signed in with identity ${identity} as ${type}`);
 }
 
-function socketDisconnected(socket) {
+function socketDisconnected(socket: Socket) {
     let matchedIndex = identifiedSockets.findIndex(item => item.socket.id === socket.id);
     let matchedInfo = identifiedSockets[matchedIndex];
 
@@ -76,6 +75,7 @@ function socketDisconnected(socket) {
             emitToIdentity(identity, "TRANSCEIVER_stateUpdated", false)
         }
         console.log(`[Socket]: Socket ${socket.id} disconnected.`);
+
     }
 
 }
