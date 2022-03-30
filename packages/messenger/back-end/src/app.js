@@ -12,7 +12,7 @@ const app = express()
 
 app.use(json())
 app.use(urlencoded({ extended: false }))
-app.use(express.static(join(__dirname, 'public')))
+app.use(express.static(join(__dirname, '../public')))
 
 app.use('/dev', logger('dev'), developerRouter)
 
