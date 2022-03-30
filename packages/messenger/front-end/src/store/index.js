@@ -1,137 +1,147 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import SocketService from '@/services/Socket';
+import SocketService from '@/services/Socket'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
-    strict: true,
+  strict: true,
 
-    modules: {},
+  modules: {},
 
-    state: {
-        commState: 'STANDBY',
+  state: {
+    commState: 'STANDBY',
 
-        identity: localStorage.getItem('identity') || 'ALPHA',
+    identity: localStorage.getItem('identity') || 'ALPHA',
 
-        transceiverOnline: false,
-        messages: [],
+    transceiverOnline: false,
+    messages: [],
 
-        messagePending: false,
+    messagePending: false,
 
-        transmitProgress: {},
+    transmitProgress: {},
 
-        receiverPending: false,
+    receiverPending: false,
+
+    bitBuffer: '00000000',
+  },
+
+  getters: {
+    isStandBy (state){
+      return state.commState === 'STANDBY'
     },
 
-    getters: {
-        isStandBy(state){
-            return state.commState === 'STANDBY'
-        },
-
-        isTransmitting(state){
-            return state.commState === 'TRANSMITTING'
-        },
-
-        isReceiving(state){
-            return state.commState === 'RECEIVING'
-        }
+    isTransmitting (state){
+      return state.commState === 'TRANSMITTING'
     },
 
-    mutations: {
+    isReceiving (state){
+      return state.commState === 'RECEIVING'
+    },
+  },
 
-        setCommState(state, newState){
-            state.commState = newState;
-        },
+  mutations: {
 
-        setIdentity(state, newIdentity) {
-            state.identity = newIdentity;
-            localStorage.setItem('identity', newIdentity)
-        },
-
-        setTransceiverOnline(state, isOnline) {
-            state.transceiverOnline = isOnline;
-        },
-
-        addMessage(state, message) {
-            state.messages.push(message)
-        },
-
-        setMessagePending(state, pending) {
-            state.messagePending = pending;
-        },
-
-        replacePendingMessage(state, newMessage) {
-            let pendingIndex = state.messages.findIndex(message => message.status === 'PENDING');
-            if (pendingIndex >= 0)
-                Vue.set(state.messages, pendingIndex, newMessage)
-        },
-
-        setTransmitProgress(state, progress){
-            state.transmitProgress  = progress;
-        },
-
-        setReceiverPending(state, pending){
-            state.receiverPending = pending;
-        }
+    setCommState (state, newState){
+      state.commState = newState
     },
 
-    actions: {
+    setIdentity (state, newIdentity) {
+      state.identity = newIdentity
+      localStorage.setItem('identity', newIdentity)
+    },
 
-        setIdentity({commit, state}, newIdentity) {
-            SocketService.emit('signIn', newIdentity, "REMOTE_CONTROL");
-            SocketService.emit('TRANSCEIVER_checkState')
-        },
+    setTransceiverOnline (state, isOnline) {
+      state.transceiverOnline = isOnline
+    },
 
-        sendMessage(context, messageContent) {
-            context.commit('addMessage', {
-                owner: context.state.identity,
-                content: messageContent,
-                sentOn: new Date(),
-                status: 'PENDING'
-            });
-            context.commit('setMessagePending', true);
-            SocketService.emit('TRANSMIT_sendMessage', messageContent);
-        },
+    addMessage (state, message) {
+      state.messages.push(message)
+    },
 
-        toggleReceiver({commit}){
-            commit('setReceiverPending', true);
-            SocketService.emit('RECEIVE_toggle')
-        },
+    setMessagePending (state, pending) {
+      state.messagePending = pending
+    },
 
-        SOCKET_STATE_updated({commit, state}, newState){
-            commit('setCommState', newState);
-            if (state.receiverPending)
-                commit('setReceiverPending', false);
-        },
+    replacePendingMessage (state, newMessage) {
+      let pendingIndex = state.messages.findIndex(message => message.status === 'PENDING')
+      if (pendingIndex >= 0)
+        Vue.set(state.messages, pendingIndex, newMessage)
+    },
 
-        SOCKET_AUTHENTICATION_signInSucceeded({commit}, identity) {
-            commit('setIdentity', identity)
-        },
+    setTransmitProgress (state, progress){
+      state.transmitProgress  = progress
+    },
 
-        SOCKET_TRANSCEIVER_stateUpdated({commit}, newState) {
-            commit('setTransceiverOnline', newState);
-            if (newState === 'STANDBY'){
-                commit('setTransmitProgress', {totalBytes: 1, sentBytes: 0})
-            }
-        },
+    setReceiverPending (state, pending){
+      state.receiverPending = pending
+    },
 
-        SOCKET_TRANSMIT_progressUpdated({commit}, progress){
-            commit('setTransmitProgress', progress);
-        },
+    setBitBuffer (state, value) {
+      state.bitBuffer = value
+    },
+  },
 
-        SOCKET_TRANSMIT_messageSent({commit, state}, message) {
+  actions: {
 
-            if (state.messagePending){
-                commit('replacePendingMessage', message);
-                commit('setMessagePending', false);
-            } else {
-                commit('addMessage', message)
-            }
-        },
+    setIdentity (context, newIdentity) {
+      SocketService.emit('signIn', newIdentity, 'REMOTE_CONTROL')
+      SocketService.emit('TRANSCEIVER_checkState')
+    },
 
-        SOCKET_RECEIVE_messageReceived({commit, state}, message) {
-            commit('addMessage', message);
-        }
-    }
+    sendMessage (context, messageContent) {
+      context.commit('addMessage', {
+        owner: context.state.identity,
+        content: messageContent,
+        sentOn: new Date(),
+        status: 'PENDING',
+      })
+      context.commit('setMessagePending', true)
+      SocketService.emit('TRANSMIT_sendMessage', messageContent)
+    },
+
+    toggleReceiver ({ commit }){
+      commit('setReceiverPending', true)
+      SocketService.emit('RECEIVE_toggle')
+    },
+
+    SOCKET_STATE_updated ({ commit, state }, newState){
+      commit('setCommState', newState)
+      if (state.receiverPending)
+        commit('setReceiverPending', false)
+    },
+
+    SOCKET_AUTHENTICATION_signInSucceeded ({ commit }, identity) {
+      commit('setIdentity', identity)
+    },
+
+    SOCKET_TRANSCEIVER_stateUpdated ({ commit }, newState) {
+      commit('setTransceiverOnline', newState)
+      if (newState === 'STANDBY'){
+        commit('setTransmitProgress', { totalBytes: 1, sentBytes: 0 })
+      }
+    },
+
+    SOCKET_TRANSMIT_progressUpdated ({ commit }, progress){
+      commit('setTransmitProgress', progress)
+    },
+
+    SOCKET_TRANSMIT_messageSent ({ commit, state }, message) {
+
+      if (state.messagePending){
+        commit('replacePendingMessage', message)
+        commit('setMessagePending', false)
+      } else {
+        commit('addMessage', message)
+      }
+    },
+
+    SOCKET_RECEIVE_messageReceived ({ commit }, message) {
+      commit('addMessage', message)
+    },
+
+    SOCKET_RECEIVE_bitBufferUpdated ({ commit }, newBuffer) {
+      commit('setBitBuffer', newBuffer)
+    },
+  },
 })

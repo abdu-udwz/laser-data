@@ -32,6 +32,7 @@ public class Main extends Application {
         super.stop();
         Threading.shutdownAll(true);
         SocketManager.disconnect();
+        System.exit(0);
     }
 
     @Override

@@ -1,5 +1,6 @@
 <template>
-  <VToolbar 
+  <VAppBar 
+    app
     color="primary"
   >
     <VToolbarTitle class="white--text">
@@ -41,7 +42,7 @@
         class="mt-1"
       />
     </VToolbarItems>
-  </VToolbar>
+  </VAppBar>
 </template>
 
 <script>

@@ -276,6 +276,14 @@ public class MainController {
                 }
             });
 
+            if (SocketManager.isConnected()) {
+                getVirtualReceiver().bitBufferProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue.length() == 8) {
+                        SocketManager.emit(SocketManager.EVENT_BIT_BUFFER_UPDATED, newValue);
+                    }
+                });
+            }
+
             Threading.FIXED_POOL
                     .submit(() -> BAO.serial().addInMessageListener(InMessageListenerType.LIGHT_READ, lightListener));
         }

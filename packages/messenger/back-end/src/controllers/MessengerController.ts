@@ -44,3 +44,15 @@ SocketManager.registerEventListener('RECEIVE', 'messageReceived', (socketInfo, m
 
   SocketManager.emitToIdentity(socketInfo.identity, 'RECEIVE_messageReceived', message)
 })
+
+
+SocketManager.registerEventListener('RECEIVE', 'bitBufferUpdated', (socketInfo, newBuffer) => {
+  SocketManager.emitToIdentity(socketInfo.identity, 'RECEIVE_bitBufferUpdated', newBuffer)
+})
+
+
+// const key = setInterval(() => {
+//   SocketManager.emitToIdentity('ALPHA', 'RECEIVE_bitBufferUpdated', Math.round(Math.random() * 127).toString(2))
+// }, 48)
+
+// clearInterval(key)

@@ -23,6 +23,8 @@ public abstract class SocketManager {
     public static final String EVENT_TOGGLE_RECEIVER = "RECEIVE_toggle";
     public static final String EVENT_RECEIVER_TOGGLE_ERROR = "RECEIVE_toggleError";
     public static final String EVENT_MESSAGE_RECEIVED = "RECEIVE_messageReceived";
+    public static final String EVENT_BIT_BUFFER_UPDATED = "RECEIVE_bitBufferUpdated";
+
 
     private static Socket socket;
     private static final BooleanProperty connected = new SimpleBooleanProperty(false);

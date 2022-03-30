@@ -4,6 +4,7 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    Board: typeof import('./src/components/Board.vue')['default']
     MessageCard: typeof import('./src/components/message/MessageCard.vue')['default']
     MessageContainer: typeof import('./src/components/message/MessageContainer.vue')['default']
     MessageDayDivider: typeof import('./src/components/message/MessageDayDivider.vue')['default']
@@ -11,22 +12,20 @@ declare module 'vue' {
     TheMessenger: typeof import('./src/components/message/TheMessenger.vue')['default']
     VAlert: typeof import('vuetify/lib')['VAlert']
     VApp: typeof import('vuetify/lib')['VApp']
+    VAppBar: typeof import('vuetify/lib')['VAppBar']
     VBadge: typeof import('vuetify/lib')['VBadge']
     VBtn: typeof import('vuetify/lib')['VBtn']
     VCard: typeof import('vuetify/lib')['VCard']
     VCardText: typeof import('vuetify/lib')['VCardText']
     VContainer: typeof import('vuetify/lib')['VContainer']
-    VContent: typeof import('vuetify/lib')['VContent']
     VDivider: typeof import('vuetify/lib')['VDivider']
     VIcon: typeof import('vuetify/lib')['VIcon']
-    VImg: typeof import('vuetify/lib')['VImg']
     VMain: typeof import('vuetify/lib')['VMain']
     VProgressCircular: typeof import('vuetify/lib')['VProgressCircular']
     VProgressLinear: typeof import('vuetify/lib')['VProgressLinear']
     VSelect: typeof import('vuetify/lib')['VSelect']
     VSpacer: typeof import('vuetify/lib')['VSpacer']
     VTextField: typeof import('vuetify/lib')['VTextField']
-    VToolbar: typeof import('vuetify/lib')['VToolbar']
     VToolbarItems: typeof import('vuetify/lib')['VToolbarItems']
     VToolbarTitle: typeof import('vuetify/lib')['VToolbarTitle']
   }
